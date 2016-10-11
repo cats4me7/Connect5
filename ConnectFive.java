@@ -4,10 +4,14 @@ import java.util.Arrays;
  * Created by Jason on 10/5/2016.
  */
 public class ConnectFive {
-    char[] data = new char[5];
+    Stack data = new Stack(5);
     private int size=0;
     private int maxSize=5;
-    char board[][][] = new char[10][10][10];
+    private int rows = 10;
+    private int col = 10;
+    private int depth = 5;
+    char board[][][] = new char[rows][col][depth];
+
     public char[][][] createEmpty() {
         for (int i = 0; i < 10; i++) {
             for (int j = 0; j < 10; j++) {
@@ -45,23 +49,8 @@ public class ConnectFive {
         return board;
     }
 
-    public void stack(char c){
-        if (getSize() == 0) {
-            data[0] = c;
-            size++;
-        } else {
-            data[size+1] = c;
-            size++;
-        }
-    }
 
-    public char lift(char c){
-        char bye = data[size];
-        size--;
-        return bye;
-    }
-
-    public int getSize(){return size;}
+    public int getSize(){return data.getSize();}
 
     public int getArraySize(){return maxSize;}
 
@@ -72,33 +61,28 @@ public class ConnectFive {
         }
         else return false;
     }
-    public boolean check(char[][][] board){
-        for (int i = 0; i <= 4; i++) {
-            for (int j = 0; j <= 9; j++) {
-                for (int k = 0; k <= 9; k++) {
-                    if (board[j][k][i] == 'R'){
+    public boolean check(char[][][] board) {
+        for (int i = 0; i < depth; i++) {
+            for (int j = 0; j < rows; j++) {
+                for (int k = 0; k < col; k++) {
+                    if (board[j][k][i] == 'R') {
+                        data.push(board[j][k][i]);
+                        board[j][k][i] = 'C';
+                    }
+                    for (int a = 1; a <= 4; a++) {
                         try {
-                            stack(board[j][k][i]);
-                        }
-                        catch (ArrayIndexOutOfBoundsException ex){}
-                        for(int a=1;a<=9;a++){
-                            if (isAdjacent((j+a),k,i)){
-                                try {
-                                    stack(board[(j + a)][k][i]);
-                                }
-                                catch(ArrayIndexOutOfBoundsException ex){}
+                            if (isAdjacent((j + a), k, i)) {
+                                data.push(board[(j + a)][k][i]);
+                                board[(j + a)][k][i] = 'C';
                             }
                         }
-                    }
-                    else if (board[i][j][k] == 'Y'){
-
+                        catch(ArrayIndexOutOfBoundsException ex){}
                     }
                 }
             }
         }
-        if (getSize()==5){
+        if (getSize() == 5) {
             return true;
-        }
-        else return false;
+        } else return false;
     }
 }
