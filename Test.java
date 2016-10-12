@@ -4,7 +4,8 @@
 public class Test {
     public static void main(String args[]){
         ConnectFive five = new ConnectFive();
-        if (five.check(five.testFill())){
+        five.testFill();
+        if (five.check(2,0,0,'R')){
             System.out.println("True");
         }
         else System.out.println("False");

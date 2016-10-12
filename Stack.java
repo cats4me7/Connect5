@@ -26,6 +26,10 @@ public class Stack {
         return result;
     }
 
+    public void clear(){
+        size=0;
+    }
+
     public Object peek() {
         if (size == 0) {
             throw new NoSuchElementException("Cannot peek into empty stack");
