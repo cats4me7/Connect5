@@ -22,13 +22,21 @@ public class Yggdrasill
        int positionX;
        int positionY;
        int positionZ;
-       int value;
+       int value = 0;
        int O = 0;
-       
+       char player1 = 'R';
+       char player2 = 'B';
        int I = 0;
        int J = 0;
        
-       for(Z = 0;Z < 10; Z++)
+       //VARIABLES FOR SEARCHING!
+       int TempX = 0;
+       int TempY = 0;
+       int TempZ = 0;
+       int SearchValue = 1;
+       boolean Searching = false;
+       
+       for(Z = 0;Z < 4; Z++)
        {
            for(X = 0;X < 10;X++)
            {
@@ -54,19 +62,315 @@ public class Yggdrasill
            {
                 for(Y = 0; Y < 10; Y++)
                 {
-                    if(simulation[Z][X][Y] == 'R')
+                    if(Z == 0)
                     {
-                        value = 1;
+                       TempX = X;
+                       TempY = Y;
+                       TempZ = Z;
+                       SearchValue = 1;
+                       Searching = false;
+                       while(Searching != true)
+                       {
+                           System.out.println("TEST!");
+                           if(Y != 0)
+                           {
+                               while(TempY > 0 && simulation[TempZ][TempY - 1][TempX] == player1)
+                               {
+                                   SearchValue = SearchValue + 1;
+                                   TempY = TempY - 1;
+                               }
+                               TempX = X;
+                               TempY = Y;
+                               TempZ = Z;
+                               while( TempX > 0 && TempY > 0 && simulation[TempZ][TempY - 1][TempX - 1] == player1)
+                               {
+                                   SearchValue = SearchValue + 1;
+                                   TempY = TempY - 1;
+                                   TempX = TempX - 1;
+                               }
+                               TempX = X;
+                               TempY = Y;
+                               TempZ = Z;
+                               while(TempY > 0 && TempX < 9 && simulation[TempZ][TempY - 1][TempX + 1] == player1)
+                               {
+                                   SearchValue = SearchValue + 1;
+                                   TempY = TempY - 1;
+                                   TempX = TempX + 1;
+                                }
+                                TempX = X;
+                                TempY = Y;
+                                TempZ = Z;
+                           }
+                           if(X != 0)
+                           {
+                               while(TempX > 0  && simulation[TempZ][TempY][TempX - 1] == player1)
+                               {
+                                   SearchValue = SearchValue + 1;
+                                   TempX = TempX - 1;
+                               }
+                               TempX = X;
+                               TempY = Y;
+                               TempZ = Z;
+                               while(TempY < 9 && TempX > 0 && simulation[TempZ][TempY + 1][TempX - 1] == player1)
+                               {
+                                   SearchValue = SearchValue + 1;
+                                   TempY = TempY + 1;
+                                   TempX = TempX - 1;
+                                }
+                               TempX = X;
+                               TempY = Y;
+                               TempZ = Z;
+                           }
+                           if(Y < 9)
+                           {
+                               while(TempY < 9 && simulation[TempZ][TempY + 1][TempX] == player1 )
+                               {
+                                   SearchValue = SearchValue + 1;
+                                   TempY = TempY + 1;
+                                   //TempX = TempX - 1;
+                                }
+                           }
+                           TempX = X;
+                           TempY = Y;
+                           TempZ = Z;
+                           if(X < 9)
+                           {
+                               while(TempX < 9 && simulation[TempZ][TempY][TempX + 1] == player1)
+                               {
+                                   SearchValue = SearchValue + 1;
+                                   TempX = TempX + 1;
+                                }     
+                           }
+                           TempX = X;
+                           TempY = Y;
+                           TempZ = Z;
+                           if(X < 9 && Y < 9)
+                           {
+                               while(TempX < 9 && TempY < 9 && simulation[TempZ][TempY + 1][TempX + 1] == player1)
+                               {
+                                   SearchValue = SearchValue + 1;
+                                   TempX = TempX + 1;
+                                   TempY = TempY + 1;
+                                }
+                            }
+                           TempX = X;
+                           TempY = Y;
+                           TempZ = Z;
+                           System.out.println("TEST@");
+                           value = SearchValue;
+                           Leaf myLeaf = new Leaf(Z,X,Y,value);
+                           LeafTree[tracker] = myLeaf;
+                           System.out.println(LeafTree[tracker].getZ() + " " + LeafTree[tracker].getX() + " " + LeafTree[tracker].getY() + " " + LeafTree[tracker].getValue());
+                           Searching = true;
+                       }
                     }
                     else
                     {
-                       value = 5;
-                    }
-                    Leaf myLeaf = new Leaf(Z,X,Y,value);
-                    LeafTree[tracker] = myLeaf;
-                    System.out.println(LeafTree[tracker].getZ() + " " + LeafTree[tracker].getX() + " " + LeafTree[tracker].getY() + " " + LeafTree[tracker].getValue());
+                       TempX = X;
+                       TempY = Y;
+                       TempZ = Z;
+                       SearchValue = 1;
+                       Searching = false;
+                       while(Searching != true)
+                       {
+                           System.out.println("TEST!");
+                           if(Y != 0)
+                           {
+                               while(TempY > 0 && TempZ > 0 && simulation[TempZ - 1][TempY - 1][TempX] == player1)
+                               {
+                                   SearchValue = SearchValue + 1;
+                                   TempY = TempY - 1;
+                               }
+                               TempX = X;
+                               TempY = Y;
+                               TempZ = Z;
+                               while( TempX > 0 && TempY > 0 && TempZ > 0 && simulation[TempZ - 1][TempY - 1][TempX - 1] == player1)
+                               {
+                                   SearchValue = SearchValue + 1;
+                                   TempY = TempY - 1;
+                                   TempX = TempX - 1;
+                               }
+                               TempX = X;
+                               TempY = Y;
+                               TempZ = Z;
+                               while(TempY > 0 && TempX < 9 && TempZ > 0 && simulation[TempZ - 1][TempY - 1][TempX + 1] == player1)
+                               {
+                                   SearchValue = SearchValue + 1;
+                                   TempY = TempY - 1;
+                                   TempX = TempX + 1;
+                                }
+                                TempX = X;
+                                TempY = Y;
+                                TempZ = Z;
+                           }
+                           if(X != 0)
+                           {
+                               while(TempX > 0  &&TempZ > 0 && simulation[TempZ - 1][TempY][TempX - 1] == player1)
+                               {
+                                   SearchValue = SearchValue + 1;
+                                   TempX = TempX - 1;
+                               }
+                               TempX = X;
+                               TempY = Y;
+                               TempZ = Z;
+                               while(TempY < 9 && TempX > 0 && TempZ > 0 && simulation[TempZ - 1][TempY + 1][TempX - 1] == player1)
+                               {
+                                   SearchValue = SearchValue + 1;
+                                   TempY = TempY + 1;
+                                   TempX = TempX - 1;
+                                }
+                               TempX = X;
+                               TempY = Y;
+                               TempZ = Z;
+                           }
+                           if(Y < 9)
+                           {
+                               while(TempY < 9 && TempZ > 0 && simulation[TempZ - 1][TempY + 1][TempX] == player1 )
+                               {
+                                   SearchValue = SearchValue + 1;
+                                   TempY = TempY + 1;
+                                   //TempX = TempX - 1;
+                                }
+                           }
+                           TempX = X;
+                           TempY = Y;
+                           TempZ = Z;
+                           if(X < 9)
+                           {
+                               while(TempX < 9 && TempZ > 0 && simulation[TempZ - 1][TempY][TempX + 1] == player1)
+                               {
+                                   SearchValue = SearchValue + 1;
+                                   TempX = TempX + 1;
+                                }     
+                           }
+                           TempX = X;
+                           TempY = Y;
+                           TempZ = Z;
+                           if(X < 9 && Y < 9)
+                           {
+                               while(TempX < 9 && TempY < 9 && TempZ > 0 && simulation[TempZ - 1][TempY + 1][TempX + 1] == player1)
+                               {
+                                   SearchValue = SearchValue + 1;
+                                   TempX = TempX + 1;
+                                   TempY = TempY + 1;
+                                }
+                            }
+                           TempX = X;
+                           TempY = Y;
+                           TempZ = Z;
+                           System.out.println("TEST@");
+                           value = SearchValue;
+                           Leaf myLeaf = new Leaf(Z,X,Y,value);
+                           LeafTree[tracker] = myLeaf;
+                           System.out.println(LeafTree[tracker].getZ() + " " + LeafTree[tracker].getX() + " " + LeafTree[tracker].getY() + " " + LeafTree[tracker].getValue());
+                           Searching = true;
+                       }
+                           
+                           //Current Level
+                           
+                       TempX = X;
+                       TempY = Y;
+                       TempZ = Z;
+                       SearchValue = 1;
+                       Searching = false;
+                       while(Searching != true)
+                            {
+                                System.out.println("TEST!");
+                                if(Y != 0)
+                                {
+                                   while(TempY > 0 && simulation[TempZ][TempY - 1][TempX] == player1)
+                                   {
+                                       SearchValue = SearchValue + 1;
+                                       TempY = TempY - 1;
+                                   }
+                                   TempX = X;
+                                   TempY = Y;
+                                   TempZ = Z;
+                                   while( TempX > 0 && TempY > 0 && simulation[TempZ][TempY - 1][TempX - 1] == player1)
+                                   {
+                                       SearchValue = SearchValue + 1;
+                                       TempY = TempY - 1;
+                                       TempX = TempX - 1;
+                                   }
+                                   TempX = X;
+                                   TempY = Y;
+                                   TempZ = Z;
+                                    while(TempY > 0 && TempX < 9 && simulation[TempZ][TempY - 1][TempX + 1] == player1)
+                                   {
+                                       SearchValue = SearchValue + 1;
+                                       TempY = TempY - 1;
+                                       TempX = TempX + 1;
+                                    }
+                                   TempX = X;
+                                   TempY = Y;
+                                   TempZ = Z;
+                               }
+                               if(X != 0)
+                               {
+                                   while(TempX > 0  && simulation[TempZ][TempY][TempX - 1] == player1)
+                                   {
+                                       SearchValue = SearchValue + 1;
+                                       TempX = TempX - 1;
+                                   }
+                                   TempX = X;
+                                   TempY = Y;
+                                   TempZ = Z;
+                                   while(TempY < 9 && TempX > 0 && simulation[TempZ][TempY + 1][TempX - 1] == player1)
+                                   {
+                                       SearchValue = SearchValue + 1;
+                                       TempY = TempY + 1;
+                                       TempX = TempX - 1;
+                                    }
+                                   TempX = X;
+                                   TempY = Y;
+                                   TempZ = Z;
+                               }
+                               if(Y < 9)
+                               {
+                                   while(TempY < 9 && simulation[TempZ][TempY + 1][TempX] == player1 )
+                                   {
+                                       SearchValue = SearchValue + 1;
+                                       TempY = TempY + 1;
+                                       //TempX = TempX - 1;
+                                    }
+                               }
+                               TempX = X;
+                               TempY = Y;
+                               TempZ = Z;
+                               if(X < 9)
+                               {
+                                   while(TempX < 9 && simulation[TempZ][TempY][TempX + 1] == player1)
+                                   {
+                                       SearchValue = SearchValue + 1;
+                                       TempX = TempX + 1;
+                                    }     
+                               }
+                               TempX = X;
+                               TempY = Y;
+                               TempZ = Z;
+                               if(X < 9 && Y < 9)
+                               {
+                                   while(TempX < 9 && TempY < 9 && simulation[TempZ][TempY + 1][TempX + 1] == player1)
+                                   {
+                                       SearchValue = SearchValue + 1;
+                                       TempX = TempX + 1;
+                                       TempY = TempY + 1;
+                                    }
+                                }
+                               TempX = X;
+                               TempY = Y;
+                               TempZ = Z;
+                               System.out.println("TEST@");
+                               value = SearchValue;
+                               Leaf myLeaf = new Leaf(Z,X,Y,value);
+                               LeafTree[tracker] = myLeaf;
+                               System.out.println(LeafTree[tracker].getZ() + " " + LeafTree[tracker].getX() + " " + LeafTree[tracker].getY() + " " + LeafTree[tracker].getValue());
+                               Searching = true;
+                           }
+                       }
+                   }
                 }
            }
        }
     }
-}
+
