@@ -12,6 +12,9 @@ public class ConnectFive {
     private int depth = 5;
     char board[][][] = new char[rows][col][depth];
 
+    /*
+    Creates empty board (full of '#' which are read as empty spaces) to be filled with pieces.
+     */
     public char[][][] createEmpty() {
         for (int i = 0; i <rows; i++) {
             for (int j = 0; j < col; j++) {
@@ -22,44 +25,32 @@ public class ConnectFive {
         }
         return board;
     }
-/*
+
+    /*
+    Creates board with predetermined pieces, used for testing only.
+     */
     public char[][][] testFill() {
-        for (int i = 0; i < 10; i++) {
-            for (int j = 0; j < 10; j++) {
-                for (int k = 0; k < 5; k++) {
-                    if (i == 0 && j == 0 && k == 0) {
-                        board[i][j][k] = 'R';
-                    }
-                    if (i == 0 && j == 1 && k == 0) {
-                        board[i][j][k] = 'R';
-                    }
-                    if (i == 0 && j == 2 && k == 0) {
-                        board[i][j][k] = 'R';
-                    }
-                    if (i == 0 && j == 3 && k == 0) {
-                        board[i][j][k] = 'R';
-                    }
-                    if (i == 0 && j == 4 && k == 0) {
-                        board[i][j][k] = 'R';
-                    }
-                    if (i == 1 && j == 0 && k == 0) {
-                        board[i][j][k] = 'R';
-                    }
-                    if (i == 2 && j == 0 && k == 0) {
-                        board[i][j][k] = 'R';
-                    }
-                    else board[i][j][k] = '#';
-                }
-            }
-        }
+        createEmpty();
+        board[1][0][0] = 'Y';
+        board[2][0][0] = 'Y';
+        board[2][0][1] = 'Y';
+        board[3][0][0] = 'Y';
+        board[3][0][1] = 'Y';
+        board[3][0][2] = 'Y';
+        board[4][0][0] = 'Y';
+        board[4][0][1] = 'Y';
+        board[4][0][2] = 'Y';
+        board[4][0][3] = 'Y';
         return board;
     }
-    */
 
+    /*
+    Inserts a piece c into the lowest possible depth in the x-y coordinate given.
+     */
     public boolean insert(int x, int y, char c) {
-        int count = 0;
+        int count = 0; //variable to determine if piece was inserted or not. If it was inserted, count will equal 1.
         for (int i = 0; i < getDepth(); i++) {
-            if (board[x][y][i] == '#') {
+            if (board[x][y][i] == '#') { //finds the lowest empty space.
                 count++;
                 board[x][y][i] = c;
                 System.out.println(c + " inserted in coordinate " + x + y + i);
@@ -73,39 +64,45 @@ public class ConnectFive {
         }
     }
 
+    /*
+    Checks how high a stack of pieces is at a certain x-y coordinate.
+     */
     public int checkDepth(int x, int y, char c) {
-        int yeet = 0;
+        int tempD = 0;
         for(int i = 0;i<getDepth();i++) {
             if (board[x][y][i] == c){
-                yeet = i;
+                tempD = i;
             }
             if (board[x][y][i] == '#') {
                 if (board[x][y][(i-1)] == c){
-                    yeet = (i-1);
+                    tempD = (i-1);
                 }
             }
         }
-        return yeet;
+        return tempD;
     }
 
     public int getDepth(){return depth;}
 
-    public int getSize() {
-        return data.getSize();
-    }
+    public int getSize() {return data.getSize();}
 
-
+    /*
+    Checks if the given coordinates in the array is the same character as the piece being checked.
+     */
     public boolean isAdjacent(int x, int y, int z, char c) {
         try{
             if (board[x][y][z] == c) {
-            return true;
+                return true;
             }
             else return false;
         }
         catch (ArrayIndexOutOfBoundsException ex){return false;}
     }
 
-    public boolean checkPX(int x, int y, int z, char c){
+    /*
+    Checks the x direction for a win condition.
+     */
+    public boolean checkX(int x, int y, int z, char c){
         for (int a = 1; a <= 4; a++) {
             try {
                 if (isAdjacent((x + a), y, z, c)) {
@@ -116,7 +113,7 @@ public class ConnectFive {
         if (getSize()==5) {return true;}
         else {
             int temp = getSize();
-            for (int b = 1; b <= 5-temp; b++) {
+            for (int b = 1; b <= (5-temp); b++) {
                 try {
                     if (isAdjacent((x - b), y, z, c)) {
                         data.push(board[(x - b)][y][z]);
@@ -126,12 +123,16 @@ public class ConnectFive {
             if (getSize() == 5) return true;
             else {
                 data.clear();
+                data.push(board[x][y][z]);
                 return false;
             }
         }
     }
 
-    public boolean checkPY(int x, int y, int z, char c){
+    /*
+    Checks y direction for win condition.
+     */
+    public boolean checkY(int x, int y, int z, char c){
         for (int a = 1; a <= 4; a++) {
             try {
                 if (isAdjacent(x, (y+a), z, c)) {
@@ -142,7 +143,7 @@ public class ConnectFive {
         if (getSize()==5) return true;
         else {
             int temp = getSize();
-            for (int b = 1; b <= 5-temp; b++) {
+            for (int b = 1; b <= (5-temp); b++) {
                 try {
                     if (isAdjacent(x, (y-b), z, c)) {
                         data.push(board[x][(y-b)][z]);
@@ -152,12 +153,16 @@ public class ConnectFive {
             if (getSize() == 5) return true;
             else {
                 data.clear();
+                data.push(board[x][y][z]);
                 return false;
             }
         }
     }
 
-    public boolean checkNZ(int x, int y, int z, char c){
+    /*
+    Checks z direction for win condition.
+     */
+    public boolean checkZ(int x, int y, int z, char c){
         for (int a = 1; a <= 4; a++) {
             try {
                 if (isAdjacent(x, y, (z-a), c)) {
@@ -168,16 +173,70 @@ public class ConnectFive {
         if (getSize()==5) return true;
         else {
             data.clear();
+            data.push(board[x][y][z]);
             return false;
         }
     }
 
+    /*
+    Checks diagonal directions for win condition.
+     */
+    public boolean checkD(int x, int y, int z, char c) {
+        for (int a = 1; a <= 4; a++) {
+            try {
+                if (isAdjacent((x + a), y, (z + a), c)) {
+                    data.push(board[(x + a)][y][(z + a)]);
+                }
+            } catch (ArrayIndexOutOfBoundsException ex) {}
+        }
+        if (getSize() == 5) return true;
+        else {
+            int temp = getSize();
+            for (int b = 1; b <= (5-temp); b++) {
+                try {
+                    if (isAdjacent((x - b), y, (z-b), c)) {
+                        data.push(board[(x - b)][y][(z-b)]);
+                    }
+                } catch (ArrayIndexOutOfBoundsException ex) {}
+            }
+            if (getSize() == 5) return true;
+            else {
+                data.clear();
+                data.push(board[x][y][z]);
+                for (int a = 1; a <= 4; a++) {
+                    try {
+                        if (isAdjacent((x + a), y, (z - a), c)) {
+                            data.push(board[(x + a)][y][(z - a)]);
+                        }
+                    } catch (ArrayIndexOutOfBoundsException ex) {}
+                }
+                if (getSize() == 5) return true;
+                else {
+                    temp = getSize();
+                    for (int b = 1; b <= (5-temp); b++) {
+                        try {
+                            if (isAdjacent((x - b), y, (z+b), c)) {
+                                data.push(board[(x - b)][y][(z+b)]);
+                            }
+                        } catch (ArrayIndexOutOfBoundsException ex) {}
+                    }
+                    }
+                    if (getSize() == 5) return true;
+                    else return false;
+                }
+            }
+        }
+
+    /*
+    Uses previous methods to check all directions for win condition.
+    */
     public boolean check(int x, int y, int z, char c) {
         if (board[x][y][z] == c) {
             data.push(board[x][y][z]);
-            if (checkPX(x,y,z,c))return true;
-            else if (checkPY(x,y,z,c))return true;
-            else if (checkNZ(x,y,z,c))return true;
+            if (checkX(x,y,z,c))return true;
+            else if (checkY(x,y,z,c))return true;
+            else if (checkZ(x,y,z,c))return true;
+            else if (checkD(x,y,z,c))return true;
             else return false;
         }
         else return false;
