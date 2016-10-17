@@ -31,16 +31,10 @@ public class ConnectFive {
      */
     public char[][][] testFill() {
         createEmpty();
-        board[1][0][0] = 'Y';
-        board[2][0][0] = 'Y';
-        board[2][0][1] = 'Y';
-        board[3][0][0] = 'Y';
-        board[3][0][1] = 'Y';
-        board[3][0][2] = 'Y';
-        board[4][0][0] = 'Y';
-        board[4][0][1] = 'Y';
-        board[4][0][2] = 'Y';
-        board[4][0][3] = 'Y';
+        board[0][0][0] = 'Y';
+        board[0][0][1] = 'Y';
+        board[0][0][2] = 'Y';
+        board[0][0][3] = 'Y';
         return board;
     }
 
@@ -49,15 +43,19 @@ public class ConnectFive {
      */
     public boolean insert(int x, int y, char c) {
         int count = 0; //variable to determine if piece was inserted or not. If it was inserted, count will equal 1.
+        int out = 0;
         for (int i = 0; i < getDepth(); i++) {
-            if (board[x][y][i] == '#') { //finds the lowest empty space.
-                count++;
-                board[x][y][i] = c;
-                System.out.println(c + " inserted in coordinate " + x + y + i);
-                break;
-            }
+            try {
+                if (board[x][y][i] == '#') { //finds the lowest empty space.
+                    count++;
+                    board[x][y][i] = c;
+                    System.out.println(c + " inserted in coordinate " + x + y + i);
+                    break;
+                }
+            } catch (ArrayIndexOutOfBoundsException ex){System.out.println("NO"); out = 1;break;}
         }
-        if (count == 1) return true;
+        if (out == 1) return false;
+        else if (count == 1) return true;
         else {
             System.out.println("Depth full, please choose a different location.");
             return false;
@@ -70,14 +68,16 @@ public class ConnectFive {
     public int checkDepth(int x, int y, char c) {
         int tempD = 0;
         for(int i = 0;i<getDepth();i++) {
-            if (board[x][y][i] == c){
-                tempD = i;
-            }
-            if (board[x][y][i] == '#') {
-                if (board[x][y][(i-1)] == c){
-                    tempD = (i-1);
+            try {
+                if (board[x][y][i] == c) {
+                    tempD = i;
                 }
-            }
+                if (board[x][y][i] == '#') {
+                    if (board[x][y][(i - 1)] == c) {
+                        tempD = (i - 1);
+                    }
+                }
+            } catch(ArrayIndexOutOfBoundsException ex){break;}
         }
         return tempD;
     }
@@ -220,25 +220,125 @@ public class ConnectFive {
                             }
                         } catch (ArrayIndexOutOfBoundsException ex) {}
                     }
+                }
+                if (getSize() == 5) return true;
+                else return false;
+            }
+        }
+    }
+
+    public boolean checkXYD(int x, int y, int z, char c){
+        for (int a = 1; a <= 4; a++) {
+            try {
+                if (isAdjacent((x + a), (y+a), (z + a), c)) {
+                    data.push(board[(x + a)][(y+a)][(z + a)]);
+                }
+            } catch (ArrayIndexOutOfBoundsException ex) {}
+        }
+        if (getSize() == 5) return true;
+        else {
+            int temp = getSize();
+            for (int b = 1; b <= (5-temp); b++) {
+                try {
+                    if (isAdjacent((x-b),(y-b),(z-b), c)) {
+                        data.push(board[(x-b)][(y-b)][(z-b)]);
+                    }
+                } catch (ArrayIndexOutOfBoundsException ex) {}
+            }
+            if (getSize() == 5) return true;
+            else {
+                data.clear();
+                data.push(board[x][y][z]);
+                for (int a = 1; a <= 4; a++) {
+                    try {
+                        if (isAdjacent((x+a),(y+a),(z-a), c)) {
+                            data.push(board[(x+a)][(y+a)][(z-a)]);
+                        }
+                    } catch (ArrayIndexOutOfBoundsException ex) {}
+                }
+                if (getSize() == 5) return true;
+                else {
+                    temp = getSize();
+                    for (int b = 1; b <= (5-temp); b++) {
+                        try {
+                            if (isAdjacent((x-b),(y-b),(z+b), c)) {
+                                data.push(board[(x-b)][(y-b)][(z+b)]);
+                            }
+                        } catch (ArrayIndexOutOfBoundsException ex) {}
+                    }
+                }
+                if (getSize() == 5) return true;
+                else {
+                    data.clear();
+                    data.push(board[x][y][z]);
+                    for (int a = 1; a <= 4; a++) {
+                        try {
+                            if (isAdjacent((x+a),(y-a),(z+a), c)) {
+                                data.push(board[(x+a)][(y-a)][(z+a)]);
+                            }
+                        } catch (ArrayIndexOutOfBoundsException ex) {}
                     }
                     if (getSize() == 5) return true;
-                    else return false;
+                    else {
+                        temp = getSize();
+                        for (int b = 1; b <= (5-temp); b++) {
+                            try {
+                                if (isAdjacent((x-b),(y+b),(z-b), c)) {
+                                    data.push(board[(x-b)][(y+b)][(z-b)]);
+                                }
+                            } catch (ArrayIndexOutOfBoundsException ex) {}
+                        }
+                    }
+                    if (getSize() == 5) return true;
+                    else{
+                        data.clear();
+                        data.push(board[x][y][z]);
+                        for (int a = 1; a <= 4; a++) {
+                            try {
+                                if (isAdjacent((x-a),(y+a),(z+a), c)) {
+                                    data.push(board[(x-a)][(y+a)][(z+a)]);
+                                }
+                            } catch (ArrayIndexOutOfBoundsException ex) {}
+                        }
+                        if (getSize() == 5) return true;
+                        else {
+                            temp = getSize();
+                            for (int b = 1; b <= (5-temp); b++) {
+                                try {
+                                    if (isAdjacent((x+b),(y-b),(z-b), c)) {
+                                        data.push(board[(x+b)][(y-b)][(z-b)]);
+                                    }
+                                } catch (ArrayIndexOutOfBoundsException ex) {}
+                            }
+                        }
+                        if (getSize() == 5) return true;
+                        else return false;
+                    }
                 }
             }
         }
+    }
 
     /*
     Uses previous methods to check all directions for win condition.
     */
     public boolean check(int x, int y, int z, char c) {
-        if (board[x][y][z] == c) {
-            data.push(board[x][y][z]);
-            if (checkX(x,y,z,c))return true;
-            else if (checkY(x,y,z,c))return true;
-            else if (checkZ(x,y,z,c))return true;
-            else if (checkD(x,y,z,c))return true;
-            else return false;
-        }
-        else return false;
+        try {
+            if (board[x][y][z] == c) {
+                data.push(board[x][y][z]);
+                if (checkX(x, y, z, c)) return true;
+                else if (checkY(x, y, z, c)) return true;
+                else if (checkZ(x, y, z, c)) return true;
+                else if (checkD(x, y, z, c)) return true;
+                else if (checkXYD(x, y, z, c)) return true;
+                else {
+                    data.clear();
+                    return false;
+                }
+            } else {
+                data.clear();
+                return false;
+            }
+        }catch(ArrayIndexOutOfBoundsException ex){return false;}
     }
 }
