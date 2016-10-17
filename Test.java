@@ -1,19 +1,32 @@
 /**
  * Created by Jason on 10/5/2016.
  */
+import java.util.Scanner;
 public class Test {
-    public static void main(String args[]){
+    public static void main(String args[]) {
         ConnectFive five = new ConnectFive();
-        for (int i=0;i<5;i++){
-            for(int j=0;j<10;j++){
-                for(int k=0;k<10;k++){
-                    //System.out.printf("maze[%d][%d][%d]= %c\n",j,k,i, five.testFill()[j][k][i]);
+        five.createEmpty();
+        boolean done = false;
+        Scanner myScanner = new Scanner(System.in);
+        while (!done) {
+            System.out.println("1. Add new piece.");
+            System.out.println("2. Quit.");
+            int choice = Integer.parseInt(myScanner.nextLine());
+            if (choice == 1){
+                System.out.println("Enter x-coordinate: ");
+                int x = Integer.parseInt(myScanner.nextLine());
+                System.out.println("Enter y-coordinate: ");
+                int y = Integer.parseInt(myScanner.nextLine());
+                five.insert(x,y,'R');
+                int z = five.checkDepth(x,y,'R');
+                if (five.check(x,y,z,'R')){
+                    System.out.println("Connect five!");
+                    done = true;
                 }
             }
+            else if (choice == 2){
+                done = true;
+            }
         }
-        if (five.check(five.testFill())==true){
-            System.out.println("True");
-        }
-        else System.out.println("False");
     }
 }
