@@ -1,15 +1,17 @@
 import java.util.Arrays;
-
+import java.util.Scanner;
 /**
  * Created by Jason on 10/5/2016.
  */
 public class ConnectFive {
     Stack data = new Stack(5);
+    Scanner myScanner = new Scanner(System.in);
     private int size = 0;
     private int maxSize = 5;
     private int rows = 10;
     private int col = 10;
     private int depth = 5;
+    boolean valid = true;
     char board[][][] = new char[rows][col][depth];
 
     /*
@@ -26,6 +28,9 @@ public class ConnectFive {
         return board;
     }
 
+    public boolean getValid(){return valid;}
+    public char[][][] getBoard(){return board;}
+
     /*
     Creates board with predetermined pieces, used for testing only.
      */
@@ -36,6 +41,22 @@ public class ConnectFive {
         board[0][0][2] = 'Y';
         board[0][0][3] = 'Y';
         return board;
+    }
+
+    public boolean playerTurn(char c){
+        boolean win = false;
+        try {
+            System.out.println("Enter x-coordinate: ");
+            int x = Integer.parseInt(myScanner.nextLine());
+            System.out.println("Enter y-coordinate: ");
+            int y = Integer.parseInt(myScanner.nextLine());
+            insert(x,y,c);
+            int z = checkDepth(x,y,c);
+            if (check(x,y,z,c)){
+                win = true;
+            }
+        } catch(NumberFormatException ex){System.out.println("Try again...");}
+        return win;
     }
 
     /*
@@ -52,12 +73,19 @@ public class ConnectFive {
                     System.out.println(c + " inserted in coordinate " + x + y + i);
                     break;
                 }
-            } catch (ArrayIndexOutOfBoundsException ex){System.out.println("NO"); out = 1;break;}
+            } catch (ArrayIndexOutOfBoundsException ex){System.out.println("Invalid move"); out = 1;break;}
         }
-        if (out == 1) return false;
-        else if (count == 1) return true;
+        if (out == 1) {
+            valid = false;
+            return false;
+        }
+        else if (count == 1) {
+            valid = true;
+            return true;
+        }
         else {
             System.out.println("Depth full, please choose a different location.");
+            valid = false;
             return false;
         }
     }
