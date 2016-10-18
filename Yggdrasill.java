@@ -36,13 +36,17 @@ public class Yggdrasill
        int SearchValue = 1;
        boolean Searching = false;
        
-       for(Z = 0;Z < 4; Z++)
+       for(Z = 0;Z < 10; Z++)
        {
            for(X = 0;X < 10;X++)
            {
                for(Y = 0; Y < 10; Y++)
                {
-                   if(X == 0 || X == 2 || X == 4 || X == 6 || X == 8)
+                   if(Z > 4 && Z < 10)
+                   {
+                        simulation[Z][X][Y] = '#';
+                   }
+                   else if(X == 0 || X == 2 || X == 4 || X == 6 || X == 8)
                    {
                        simulation[Z][X][Y] = 'R';
                    }
@@ -55,8 +59,21 @@ public class Yggdrasill
        }
     
        //Print Everything!!!
-         
        for(Z = 0;Z < 10; Z++)
+       {
+           for(X = 0;X < 10;X++)
+           {
+               for(Y = 0; Y < 10; Y++)
+               {
+                   System.out.println(simulation[Z][X][Y]);
+               }
+           }
+       }
+       
+       
+       // This is the value determiner
+         
+       for(Z = 0;Z < 1; Z++)
        {
            for(X = 0;X < 10;X++)
            {
@@ -67,6 +84,15 @@ public class Yggdrasill
                        TempX = X;
                        TempY = Y;
                        TempZ = Z;
+                       int S = 1;
+                       if(simulation[S][X][Y] != '#')
+                       {
+                           while(S < 9 && simulation[S][X][Y] != '#')
+                           {
+                               Z = Z + 1;
+                               S = S + 1;
+                           }
+                       }
                        SearchValue = 1;
                        Searching = false;
                        while(Searching != true)
@@ -156,7 +182,7 @@ public class Yggdrasill
                            TempX = X;
                            TempY = Y;
                            TempZ = Z;
-                           System.out.println("TEST@");
+                           System.out.println("TEST " + Z);
                            value = SearchValue;
                            Leaf myLeaf = new Leaf(Z,X,Y,value);
                            LeafTree[tracker] = myLeaf;
@@ -173,7 +199,7 @@ public class Yggdrasill
                        Searching = false;
                        while(Searching != true)
                        {
-                           System.out.println("TEST!");
+                           System.out.println("ELSE!");
                            if(Y != 0)
                            {
                                while(TempY > 0 && TempZ > 0 && simulation[TempZ - 1][TempY - 1][TempX] == player1)
@@ -255,16 +281,7 @@ public class Yggdrasill
                                    TempY = TempY + 1;
                                 }
                             }
-                           TempX = X;
-                           TempY = Y;
-                           TempZ = Z;
-                           System.out.println("TEST@");
-                           value = SearchValue;
-                           Leaf myLeaf = new Leaf(Z,X,Y,value);
-                           LeafTree[tracker] = myLeaf;
-                           System.out.println(LeafTree[tracker].getZ() + " " + LeafTree[tracker].getX() + " " + LeafTree[tracker].getY() + " " + LeafTree[tracker].getValue());
-                           Searching = true;
-                       }
+                         
                            
                            //Current Level
                            
@@ -273,9 +290,9 @@ public class Yggdrasill
                        TempZ = Z;
                        SearchValue = 1;
                        Searching = false;
-                       while(Searching != true)
-                            {
-                                System.out.println("TEST!");
+                       //while(Searching != true)
+                       //     {
+                                //System.out.println("TEST!");
                                 if(Y != 0)
                                 {
                                    while(TempY > 0 && simulation[TempZ][TempY - 1][TempX] == player1)
@@ -360,9 +377,10 @@ public class Yggdrasill
                                TempX = X;
                                TempY = Y;
                                TempZ = Z;
-                               System.out.println("TEST@");
+                               System.out.println("TEST" + Z);
                                value = SearchValue;
                                Leaf myLeaf = new Leaf(Z,X,Y,value);
+                               System.out.println(myLeaf.getX());
                                LeafTree[tracker] = myLeaf;
                                System.out.println(LeafTree[tracker].getZ() + " " + LeafTree[tracker].getX() + " " + LeafTree[tracker].getY() + " " + LeafTree[tracker].getValue());
                                Searching = true;

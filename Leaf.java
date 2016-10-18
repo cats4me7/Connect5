@@ -7,7 +7,7 @@ public class Leaf
     public int value;
     private int maxSize;
     public int location;
-    public Leaf(int positionX , int positionY , int positionZ , int value )
+    public Leaf(int positionZ , int positionX , int positionY , int value )
     {
         this.positionX = positionX;
         this.positionY = positionY;
