@@ -19,7 +19,7 @@ public class ConnectGUI extends JApplet
     int X;
     int Y;
     int Z;
-    char Team;
+    char Team = 'R';
     int TempX;
     int TempY;
     int TempZ;
@@ -32,26 +32,22 @@ public class ConnectGUI extends JApplet
     int FinalY = 0;
     int FinalZ = 0;
     int FinalValue = 0;
+    int counter = 0;
+    public int turn = 0;
     
     
     
-    
-    
-    
+    boolean ThisGame = false;
     //End variables
     private class ButtonListener implements ActionListener
     {
         public void actionPerformed(ActionEvent e)
         {
             Graphics g = getGraphics();
-            for(int Q = 0; Q < 1000; Q++)
+            for(int x = 0; x < 1000; x++)
             {
                 BestMove('R');
                 BestMove('G');
-                BestMove('B');
-                BestMove('Y');
-                BestMove('O');
-                //repaint();
             }
         }
     }
@@ -95,17 +91,80 @@ public class ConnectGUI extends JApplet
                 int z = 0;
                 int h = i;
                 int c = j;
+                
+                if(turn == 0)
+                {
+                    Team = 'R';
+                }
+                else if(turn == 1)
+                {
+                    Team = 'G';
+                }
+                else if(turn == 2)
+                {
+                    Team = 'B';
+                }
+                else if(turn == 3)
+                {
+                    Team = 'Y';
+                }
+                else
+                {
+                    Team = 'O';
+                }
+                
                 if(simulation[z][c][h] == '#')
                 {
-                    simulation[z][c][h] = 'R';
+                    simulation[z][c][h] = Team;
+                    if(turn == 0)
+                    {
+                        turn = 1;
+                    }
+                    else if(turn == 1)
+                    {
+                        turn = 2;
+                    }
+                    else if(turn == 2)
+                    {
+                        turn = 3;
+                    }
+                    else if(turn == 3)
+                    {
+                        turn = 4;
+                    }
+                    else
+                    {
+                        turn = 0;
+                    }
                 }
                 else if(simulation[z][c][h] != '#' && z < 10)
                 {
+                    if(turn == 0)
+                    {
+                        turn = 1;
+                    }
+                    else if(turn == 1)
+                    {
+                        turn = 2;
+                    }
+                    else if(turn == 2)
+                    {
+                        turn = 3;
+                    }
+                    else if(turn == 3)
+                    {
+                        turn = 4;
+                    }
+                    else
+                    {
+                        turn = 0;
+                    }
+                    
                     while(simulation[z][c][h] != '#' && z < 10)
                     {
                         z = z + 1;
                     }
-                    simulation[z][c][h] = 'R';
+                    simulation[z][c][h] = Team;
                 }
                 else
                 {
