@@ -5,12 +5,20 @@ import java.util.NoSuchElementException;
 import java.util.Scanner;
 public class Test {
     public static void main(String args[]) {
+        Scanner myScanner = new Scanner(System.in);
         int maxPlayers=2;
         int player = 0;
+        /*
+        System.out.println("Rows?");
+        int rows = Integer.parseInt(myScanner.nextLine());
+        System.out.println("Columns?");
+        int col = Integer.parseInt(myScanner.nextLine());
+        System.out.println("Depth?");
+        int depth = Integer.parseInt(myScanner.nextLine());
+        */
         ConnectFive five = new ConnectFive();
         five.createEmpty();
         boolean done = false;
-        Scanner myScanner = new Scanner(System.in);
         System.out.println("How many people are playing?");
         maxPlayers = Integer.parseInt(myScanner.nextLine());
         while (!done) {
