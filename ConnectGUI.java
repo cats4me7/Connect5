@@ -44,7 +44,7 @@ public class ConnectGUI extends JApplet
         public void actionPerformed(ActionEvent e)
         {
             Graphics g = getGraphics();
-            for(int Q = 0; Q < 100; Q++)
+            for(int Q = 0; Q < 1000; Q++)
             {
                 BestMove('R');
                 BestMove('G');
@@ -80,10 +80,39 @@ public class ConnectGUI extends JApplet
     
     private class MousePressedListener implements MouseListener
     {
+        
         public void mousePressed(MouseEvent e)
         {
-            
-
+            int i = e.getX();
+            int j = e.getY();
+            Graphics g = getGraphics();
+            //if(i < 800 && j < 400)
+            //{
+                i = i - 800;
+                j = j - 400;
+                i = i / 20;
+                j = j / 20;
+                int z = 0;
+                int h = i;
+                int c = j;
+                if(simulation[z][c][h] == '#')
+                {
+                    simulation[z][c][h] = 'R';
+                }
+                else if(simulation[z][c][h] != '#' && z < 10)
+                {
+                    while(simulation[z][c][h] != '#' && z < 10)
+                    {
+                        z = z + 1;
+                    }
+                    simulation[z][c][h] = 'R';
+                }
+                else
+                {
+                    //simulation[0][1][1] = 'R';
+                }
+            //}
+            repaint();
         }
 
         public void mouseReleased(MouseEvent e)
@@ -132,7 +161,6 @@ public class ConnectGUI extends JApplet
         rootPane.add(clearButton);
         clearButton.setBounds(450,500,200,50);
         this.addMouseListener(myListener);
-       
 
         // provide any initialisation necessary for your JApplet
     }
@@ -179,7 +207,7 @@ public class ConnectGUI extends JApplet
            {
                for(Y = 0; Y < 10; Y++)
                {
-                   if(simulation[Z][X][Y] == 'R')
+                   if(simulation[Z][Y][X] == 'R')
                    {
                        g.setColor(Color.red);
                        if(Z < 5)
@@ -193,7 +221,7 @@ public class ConnectGUI extends JApplet
                      
                        }
                    }
-                   else if(simulation[Z][X][Y] == 'G')
+                   else if(simulation[Z][Y][X] == 'G')
                    {
                        g.setColor(Color.green); 
                        if(Z < 5)
@@ -207,7 +235,7 @@ public class ConnectGUI extends JApplet
                      
                        }
                    }
-                   else if(simulation[Z][X][Y] == 'B')
+                   else if(simulation[Z][Y][X] == 'B')
                    {
                        g.setColor(Color.blue); 
                        if(Z < 5)
@@ -221,7 +249,7 @@ public class ConnectGUI extends JApplet
                      
                        }
                    }
-                   else if(simulation[Z][X][Y] == 'Y')
+                   else if(simulation[Z][Y][X] == 'Y')
                    {
                        g.setColor(Color.yellow); 
                        if(Z < 5)
@@ -235,7 +263,7 @@ public class ConnectGUI extends JApplet
                      
                        }
                    }
-                   else if(simulation[Z][X][Y] == 'O')
+                   else if(simulation[Z][Y][X] == 'O')
                    {
                        g.setColor(Color.orange); 
                        if(Z < 5)
@@ -276,6 +304,14 @@ public class ConnectGUI extends JApplet
                       
                    }
                }
+           }
+       }
+       for(int x = 0; x < 10; x++)
+       {
+           for(int y = 0; y < 10; y++)
+           {
+               g.setColor(Color.black);
+               g.drawRect(x * 20 + 800,y * 20 + 400,20,20);
            }
        }
      
@@ -327,32 +363,35 @@ public class ConnectGUI extends JApplet
         
         
     }
+    
+    char getAt(int x, int y, int z) {
+        return simulation[z][y][x];
+    }
 
     // Gets the best move and executes it.
     public void BestMove(char Team)
     {
        this.Team = Team;
        tracker = 0;
-       for(Z = 0;Z < 1; Z++)
-       {
            for(X = 0;X < 10;X++)
            {
                 for(Y = 0; Y < 10; Y++)
                 {
-                    if(Z == 0)
-                    {
-                       TempX = X;
-                       TempY = Y;
-                       TempZ = Z;
-                       int S = 1;
-                       if(simulation[S][X][Y] != '#')
+                    int S = 0;
+                    if(simulation[S][Y][X] != '#')
                        {
-                           while(S < 9 && simulation[S][X][Y] != '#')
+                           while(S < 9 && simulation[S][Y][X] != '#')
                            {
-                               Z = Z + 1;
+                              // Z = Z + 1;
                                S = S + 1;
                            }
                        }
+                    if(S == 0)
+                    {
+                       TempX = X;
+                       TempY = Y;
+                       TempZ = S;
+                       
                        SearchValue = 1;
                        Searching = false;
                        while(Searching != true)
@@ -360,14 +399,14 @@ public class ConnectGUI extends JApplet
                            //System.out.println("TEST!");
                            if(Y != 0)
                            {
-                               while(TempY > 0 && simulation[TempZ][TempY - 1][TempX] == Team)
+                               while (TempY > 0 && getAt(X, TempY - 1, S) == Team)
                                {
                                    SearchValue = SearchValue + 1;
                                    TempY = TempY - 1;
                                }
                                TempX = X;
                                TempY = Y;
-                               TempZ = Z;
+                               TempZ = S;
                                while( TempX > 0 && TempY > 0 && simulation[TempZ][TempY - 1][TempX - 1] == Team)
                                {
                                    SearchValue = SearchValue + 1;
@@ -376,7 +415,7 @@ public class ConnectGUI extends JApplet
                                }
                                TempX = X;
                                TempY = Y;
-                               TempZ = Z;
+                               TempZ = S;
                                while(TempY > 0 && TempX < 9 && simulation[TempZ][TempY - 1][TempX + 1] == Team)
                                {
                                    SearchValue = SearchValue + 1;
@@ -385,7 +424,7 @@ public class ConnectGUI extends JApplet
                                 }
                                 TempX = X;
                                 TempY = Y;
-                                TempZ = Z;
+                                TempZ = S;
                            }
                            if(X != 0)
                            {
@@ -396,7 +435,7 @@ public class ConnectGUI extends JApplet
                                }
                                TempX = X;
                                TempY = Y;
-                               TempZ = Z;
+                               TempZ = S;
                                while(TempY < 9 && TempX > 0 && simulation[TempZ][TempY + 1][TempX - 1] == Team)
                                {
                                    SearchValue = SearchValue + 1;
@@ -405,7 +444,7 @@ public class ConnectGUI extends JApplet
                                 }
                                TempX = X;
                                TempY = Y;
-                               TempZ = Z;
+                               TempZ = S;
                            }
                            if(Y < 9)
                            {
@@ -418,7 +457,7 @@ public class ConnectGUI extends JApplet
                            }
                            TempX = X;
                            TempY = Y;
-                           TempZ = Z;
+                           TempZ = S;
                            if(X < 9)
                            {
                                while(TempX < 9 && simulation[TempZ][TempY][TempX + 1] == Team)
@@ -429,7 +468,7 @@ public class ConnectGUI extends JApplet
                            }
                            TempX = X;
                            TempY = Y;
-                           TempZ = Z;
+                           TempZ = S;
                            if(X < 9 && Y < 9)
                            {
                                while(TempX < 9 && TempY < 9 && simulation[TempZ][TempY + 1][TempX + 1] == Team)
@@ -441,18 +480,18 @@ public class ConnectGUI extends JApplet
                             }
                            TempX = X;
                            TempY = Y;
-                           TempZ = Z;
+                           TempZ = S;
                            //System.out.println("TEST " + Z);
                            //FinalValue = SearchValue;
-                           Leaf myLeaf = new Leaf(Z,X,Y,SearchValue);
+                           Leaf myLeaf = new Leaf(S,Y,X,SearchValue);
                            LeafTree[tracker] = myLeaf;
-                           if(SearchValue > FinalValue)
+                           if(simulation[S][Y][X] == '#')
                            {
-                               if(simulation[Z][X][Y] == '#')
+                               if(SearchValue >= FinalValue)
                                {
                                    FinalX = X;
                                    FinalY = Y;
-                                   FinalZ = Z; 
+                                   FinalZ = S; 
                                    FinalValue = SearchValue;
                                }
                                else
@@ -468,7 +507,7 @@ public class ConnectGUI extends JApplet
                     {
                        TempX = X;
                        TempY = Y;
-                       TempZ = Z;
+                       TempZ = S;
                        SearchValue = 1;
                        Searching = false;
                        while(Searching != true)
@@ -483,7 +522,7 @@ public class ConnectGUI extends JApplet
                                }
                                TempX = X;
                                TempY = Y;
-                               TempZ = Z;
+                               TempZ = S;
                                while( TempX > 0 && TempY > 0 && TempZ > 0 && simulation[TempZ - 1][TempY - 1][TempX - 1] == Team)
                                {
                                    SearchValue = SearchValue + 1;
@@ -492,7 +531,7 @@ public class ConnectGUI extends JApplet
                                }
                                TempX = X;
                                TempY = Y;
-                               TempZ = Z;
+                               TempZ = S;
                                while(TempY > 0 && TempX < 9 && TempZ > 0 && simulation[TempZ - 1][TempY - 1][TempX + 1] == Team)
                                {
                                    SearchValue = SearchValue + 1;
@@ -501,7 +540,7 @@ public class ConnectGUI extends JApplet
                                 }
                                 TempX = X;
                                 TempY = Y;
-                                TempZ = Z;
+                                TempZ = S;
                            }
                            if(X != 0)
                            {
@@ -512,7 +551,7 @@ public class ConnectGUI extends JApplet
                                }
                                TempX = X;
                                TempY = Y;
-                               TempZ = Z;
+                               TempZ = S;
                                while(TempY < 9 && TempX > 0 && TempZ > 0 && simulation[TempZ - 1][TempY + 1][TempX - 1] == Team)
                                {
                                    SearchValue = SearchValue + 1;
@@ -521,7 +560,7 @@ public class ConnectGUI extends JApplet
                                 }
                                TempX = X;
                                TempY = Y;
-                               TempZ = Z;
+                               TempZ = S;
                            }
                            if(Y < 9)
                            {
@@ -534,7 +573,7 @@ public class ConnectGUI extends JApplet
                            }
                            TempX = X;
                            TempY = Y;
-                           TempZ = Z;
+                           TempZ = S;
                            if(X < 9)
                            {
                                while(TempX < 9 && TempZ > 0 && simulation[TempZ - 1][TempY][TempX + 1] == Team)
@@ -545,7 +584,7 @@ public class ConnectGUI extends JApplet
                            }
                            TempX = X;
                            TempY = Y;
-                           TempZ = Z;
+                           TempZ = S;
                            if(X < 9 && Y < 9)
                            {
                                while(TempX < 9 && TempY < 9 && TempZ > 0 && simulation[TempZ - 1][TempY + 1][TempX + 1] == Team)
@@ -561,7 +600,7 @@ public class ConnectGUI extends JApplet
                            
                            TempX = X;
                            TempY = Y;
-                           TempZ = Z;
+                           TempZ = S;
                            SearchValue = 1;
                            Searching = false;
                            //System.out.println("TEST!");
@@ -574,7 +613,7 @@ public class ConnectGUI extends JApplet
                                }
                                TempX = X;
                                TempY = Y;
-                               TempZ = Z;
+                               TempZ = S;
                                while( TempX > 0 && TempY > 0 && simulation[TempZ][TempY - 1][TempX - 1] == Team)
                                {
                                    SearchValue = SearchValue + 1;
@@ -583,7 +622,7 @@ public class ConnectGUI extends JApplet
                                }
                                TempX = X;
                                TempY = Y;
-                               TempZ = Z;
+                               TempZ = S;
                                while(TempY > 0 && TempX < 9 && simulation[TempZ][TempY - 1][TempX + 1] == Team)
                                {
                                    SearchValue = SearchValue + 1;
@@ -592,7 +631,7 @@ public class ConnectGUI extends JApplet
                                }
                                TempX = X;
                                TempY = Y;
-                               TempZ = Z;
+                               TempZ = S;
                            }
                            if(X != 0)
                            {
@@ -603,7 +642,7 @@ public class ConnectGUI extends JApplet
                                }
                                TempX = X;
                                TempY = Y;
-                               TempZ = Z;
+                               TempZ = S;
                                while(TempY < 9 && TempX > 0 && simulation[TempZ][TempY + 1][TempX - 1] == Team)
                                {
                                    SearchValue = SearchValue + 1;
@@ -612,7 +651,7 @@ public class ConnectGUI extends JApplet
                                }
                                TempX = X;
                                TempY = Y;
-                               TempZ = Z;
+                               TempZ = S ;
                            }
                            if(Y < 9)
                            {
@@ -625,7 +664,7 @@ public class ConnectGUI extends JApplet
                            }
                            TempX = X;
                            TempY = Y;
-                           TempZ = Z;
+                           TempZ = S;
                            if(X < 9)
                            {
                                while(TempX < 9 && simulation[TempZ][TempY][TempX + 1] == Team)
@@ -636,7 +675,7 @@ public class ConnectGUI extends JApplet
                            }
                            TempX = X;
                            TempY = Y;
-                           TempZ = Z;
+                           TempZ = S;
                            if(X < 9 && Y < 9)
                            {
                                while(TempX < 9 && TempY < 9 && simulation[TempZ][TempY + 1][TempX + 1] == Team)
@@ -648,19 +687,19 @@ public class ConnectGUI extends JApplet
                            }
                            TempX = X;
                            TempY = Y;
-                           TempZ = Z;
+                           TempZ = S;
                            //System.out.println("TEST" + Z);
                            //FinalValue = SearchValue;
-                           Leaf myLeaf = new Leaf(Z,X,Y,SearchValue);
+                           Leaf myLeaf = new Leaf(S,Y,X,SearchValue);
                            //System.out.println(myLeaf.getX());
                            LeafTree[tracker] = myLeaf;
-                           if(SearchValue > FinalValue)
+                           if(simulation[S][Y][X] == '#')
                            {
-                               if(simulation[Z][X][Y] == '#')
+                               if(SearchValue >= FinalValue)
                                {
                                    FinalX = X;
                                    FinalY = Y;
-                                   FinalZ = Z; 
+                                   FinalZ = S; 
                                    FinalValue = SearchValue;
                                }
                                else
@@ -673,9 +712,8 @@ public class ConnectGUI extends JApplet
                        }
                     }
                 }
-           }
-       }
-       simulation[FinalZ][FinalX][FinalY] = this.Team;
+            }
+       simulation[FinalZ][FinalY][FinalX] = this.Team;
        repaint();
     }
 
