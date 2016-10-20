@@ -35,7 +35,7 @@ public class ConnectGUI extends JApplet
     int counter = 0;
     public int turn = 0;
     int ran = 1;
-    
+    int S = 1;
     
     boolean ThisGame = false;
     //End variables
@@ -46,8 +46,11 @@ public class ConnectGUI extends JApplet
             Graphics g = getGraphics();
             for(int x = 0; x < 1000; x++)
             {
-                BestMove('R');
-                BestMove('G');
+                AI('R');
+                AI('G');
+                AI('B');
+                AI('Y');
+                AI('O');
             }
         }
     }
@@ -426,388 +429,53 @@ public class ConnectGUI extends JApplet
     char getAt(int x, int y, int z) {
         return simulation[z][y][x];
     }
-
-    // Gets the best move and executes it.
-    public void BestMove(char Team)
+    
+    boolean Legal(int x , int y)
     {
-       this.Team = Team;
-       tracker = 0;
-           for(X = 0;X < 10;X++)
-           {
-                for(Y = 0; Y < 10; Y++)
+        if(simulation[9][y][x] == '#')
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+    
+    boolean Place(int x, int y, char Team)
+    {
+        int zed = 0;
+        while(simulation[zed][y][x] != '#' && zed < 10)
+        {
+            zed = zed + 1;
+        }
+        if(zed < 10)
+        {
+            simulation[zed][y][x] = Team;
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+    
+    //Very Simple AI, just does rows. Its a start.
+    boolean AI(char Team)
+    {
+        for(int AIX = 0; AIX < 10; AIX = AIX + 1)
+        {
+            for(int AIY = 0; AIY < 10; AIY = AIY + 1)
+            {
+                if(Legal(AIX,AIY))
                 {
-                    int S = 0;
-                    if(simulation[S][Y][X] != '#')
-                       {
-                           while(S < 9 && simulation[S][Y][X] != '#')
-                           {
-                              // Z = Z + 1;
-                               S = S + 1;
-                           }
-                       }
-                    if(S == 0)
-                    {
-                       TempX = X;
-                       TempY = Y;
-                       TempZ = S;
-                       
-                       SearchValue = 1;
-                       Searching = false;
-                       while(Searching != true)
-                       {
-                           //System.out.println("TEST!");
-                           if(Y != 0)
-                           {
-                               while (TempY > 0 && getAt(X, TempY - 1, S) == Team)
-                               {
-                                   SearchValue = SearchValue + 1;
-                                   TempY = TempY - 1;
-                               }
-                               TempX = X;
-                               TempY = Y;
-                               TempZ = S;
-                               while( TempX > 0 && TempY > 0 && simulation[TempZ][TempY - 1][TempX - 1] == Team)
-                               {
-                                   SearchValue = SearchValue + 1;
-                                   TempY = TempY - 1;
-                                   TempX = TempX - 1;
-                               }
-                               TempX = X;
-                               TempY = Y;
-                               TempZ = S;
-                               while(TempY > 0 && TempX < 9 && simulation[TempZ][TempY - 1][TempX + 1] == Team)
-                               {
-                                   SearchValue = SearchValue + 1;
-                                   TempY = TempY - 1;
-                                   TempX = TempX + 1;
-                                }
-                                TempX = X;
-                                TempY = Y;
-                                TempZ = S;
-                           }
-                           if(X != 0)
-                           {
-                               while(TempX > 0  && simulation[TempZ][TempY][TempX - 1] == Team)
-                               {
-                                   SearchValue = SearchValue + 1;
-                                   TempX = TempX - 1;
-                               }
-                               TempX = X;
-                               TempY = Y;
-                               TempZ = S;
-                               while(TempY < 9 && TempX > 0 && simulation[TempZ][TempY + 1][TempX - 1] == Team)
-                               {
-                                   SearchValue = SearchValue + 1;
-                                   TempY = TempY + 1;
-                                   TempX = TempX - 1;
-                                }
-                               TempX = X;
-                               TempY = Y;
-                               TempZ = S;
-                           }
-                           if(Y < 9)
-                           {
-                               while(TempY < 9 && simulation[TempZ][TempY + 1][TempX] == Team )
-                               {
-                                   SearchValue = SearchValue + 1;
-                                   TempY = TempY + 1;
-                                   //TempX = TempX - 1;
-                                }
-                           }
-                           TempX = X;
-                           TempY = Y;
-                           TempZ = S;
-                           if(X < 9)
-                           {
-                               while(TempX < 9 && simulation[TempZ][TempY][TempX + 1] == Team)
-                               {
-                                   SearchValue = SearchValue + 1;
-                                   TempX = TempX + 1;
-                                }     
-                           }
-                           TempX = X;
-                           TempY = Y;
-                           TempZ = S;
-                           if(X < 9 && Y < 9)
-                           {
-                               while(TempX < 9 && TempY < 9 && simulation[TempZ][TempY + 1][TempX + 1] == Team)
-                               {
-                                   SearchValue = SearchValue + 1;
-                                   TempX = TempX + 1;
-                                   TempY = TempY + 1;
-                                }
-                            }
-                           TempX = X;
-                           TempY = Y;
-                           TempZ = S;
-                           //System.out.println("TEST " + Z);
-                           //FinalValue = SearchValue;
-                           if(ran == 1)
-                           {
-                               Leaf myLeaf = new Leaf(S,Y,X,SearchValue);
-                               LeafTree[tracker] = myLeaf;
-                           }
-                           else
-                           {
-                               LeafTree[tracker].setValue(SearchValue);
-                               LeafTree[tracker].setX(X);
-                               LeafTree[tracker].setY(Y);
-                               LeafTree[tracker].setZ(S);
-                           }
-                           tracker = tracker + 1;
-                           if(simulation[S][Y][X] == '#')
-                           {
-                               if(SearchValue >= FinalValue)
-                               {
-                                   FinalX = X;
-                                   FinalY = Y;
-                                   FinalZ = S; 
-                                   FinalValue = SearchValue;
-                               }
-                               else
-                               {
-                                   
-                               }
-                           }
-                           //System.out.println(LeafTree[tracker].getZ() + " " + LeafTree[tracker].getX() + " " + LeafTree[tracker].getY() + " " + LeafTree[tracker].getValue());
-                           Searching = true;
-                       }
-                    }
-                    else
-                    {
-                       TempX = X;
-                       TempY = Y;
-                       TempZ = S;
-                       SearchValue = 1;
-                       Searching = false;
-                       while(Searching != true)
-                       {
-                           
-                           if(Y != 0)
-                           {
-                               while(TempY > 0 && TempZ > 0 && simulation[TempZ - 1][TempY - 1][TempX] == Team)
-                               {
-                                   SearchValue = SearchValue + 1;
-                                   TempY = TempY - 1;
-                               }
-                               TempX = X;
-                               TempY = Y;
-                               TempZ = S;
-                               while( TempX > 0 && TempY > 0 && TempZ > 0 && simulation[TempZ - 1][TempY - 1][TempX - 1] == Team)
-                               {
-                                   SearchValue = SearchValue + 1;
-                                   TempY = TempY - 1;
-                                   TempX = TempX - 1;
-                               }
-                               TempX = X;
-                               TempY = Y;
-                               TempZ = S;
-                               while(TempY > 0 && TempX < 9 && TempZ > 0 && simulation[TempZ - 1][TempY - 1][TempX + 1] == Team)
-                               {
-                                   SearchValue = SearchValue + 1;
-                                   TempY = TempY - 1;
-                                   TempX = TempX + 1;
-                                }
-                                TempX = X;
-                                TempY = Y;
-                                TempZ = S;
-                           }
-                           if(X != 0)
-                           {
-                               while(TempX > 0  &&TempZ > 0 && simulation[TempZ - 1][TempY][TempX - 1] == Team)
-                               {
-                                   SearchValue = SearchValue + 1;
-                                   TempX = TempX - 1;
-                               }
-                               TempX = X;
-                               TempY = Y;
-                               TempZ = S;
-                               while(TempY < 9 && TempX > 0 && TempZ > 0 && simulation[TempZ - 1][TempY + 1][TempX - 1] == Team)
-                               {
-                                   SearchValue = SearchValue + 1;
-                                   TempY = TempY + 1;
-                                   TempX = TempX - 1;
-                                }
-                               TempX = X;
-                               TempY = Y;
-                               TempZ = S;
-                           }
-                           if(Y < 9)
-                           {
-                               while(TempY < 9 && TempZ > 0 && simulation[TempZ - 1][TempY + 1][TempX] == Team )
-                               {
-                                   SearchValue = SearchValue + 1;
-                                   TempY = TempY + 1;
-                                   //TempX = TempX - 1;
-                                }
-                           }
-                           TempX = X;
-                           TempY = Y;
-                           TempZ = S;
-                           if(X < 9)
-                           {
-                               while(TempX < 9 && TempZ > 0 && simulation[TempZ - 1][TempY][TempX + 1] == Team)
-                               {
-                                   SearchValue = SearchValue + 1;
-                                   TempX = TempX + 1;
-                                }     
-                           }
-                           TempX = X;
-                           TempY = Y;
-                           TempZ = S;
-                           if(X < 9 && Y < 9)
-                           {
-                               while(TempX < 9 && TempY < 9 && TempZ > 0 && simulation[TempZ - 1][TempY + 1][TempX + 1] == Team)
-                               {
-                                   SearchValue = SearchValue + 1;
-                                   TempX = TempX + 1;
-                                   TempY = TempY + 1;
-                                }
-                            }
-                         
-                           
-                           //Current Level
-                           
-                           TempX = X;
-                           TempY = Y;
-                           TempZ = S;
-                           SearchValue = 1;
-                           Searching = false;
-                           //System.out.println("TEST!");
-                           if(Y != 0)
-                           {
-                               while(TempY > 0 && simulation[TempZ][TempY - 1][TempX] == Team)
-                               {
-                                   SearchValue = SearchValue + 1;
-                                   TempY = TempY - 1;
-                               }
-                               TempX = X;
-                               TempY = Y;
-                               TempZ = S;
-                               while( TempX > 0 && TempY > 0 && simulation[TempZ][TempY - 1][TempX - 1] == Team)
-                               {
-                                   SearchValue = SearchValue + 1;
-                                   TempY = TempY - 1;
-                                   TempX = TempX - 1;
-                               }
-                               TempX = X;
-                               TempY = Y;
-                               TempZ = S;
-                               while(TempY > 0 && TempX < 9 && simulation[TempZ][TempY - 1][TempX + 1] == Team)
-                               {
-                                   SearchValue = SearchValue + 1;
-                                   TempY = TempY - 1;
-                                   TempX = TempX + 1;
-                               }
-                               TempX = X;
-                               TempY = Y;
-                               TempZ = S;
-                           }
-                           if(X != 0)
-                           {
-                               while(TempX > 0  && simulation[TempZ][TempY][TempX - 1] == Team)
-                               {
-                                   SearchValue = SearchValue + 1;
-                                   TempX = TempX - 1;
-                               }
-                               TempX = X;
-                               TempY = Y;
-                               TempZ = S;
-                               while(TempY < 9 && TempX > 0 && simulation[TempZ][TempY + 1][TempX - 1] == Team)
-                               {
-                                   SearchValue = SearchValue + 1;
-                                   TempY = TempY + 1;
-                                   TempX = TempX - 1;
-                               }
-                               TempX = X;
-                               TempY = Y;
-                               TempZ = S ;
-                           }
-                           if(Y < 9)
-                           {
-                               while(TempY < 9 && simulation[TempZ][TempY + 1][TempX] == Team )
-                               {
-                                   SearchValue = SearchValue + 1;
-                                   TempY = TempY + 1;
-                                   //TempX = TempX - 1;
-                               }
-                           }
-                           TempX = X;
-                           TempY = Y;
-                           TempZ = S;
-                           if(X < 9)
-                           {
-                               while(TempX < 9 && simulation[TempZ][TempY][TempX + 1] == Team)
-                               {
-                                   SearchValue = SearchValue + 1;
-                                   TempX = TempX + 1;
-                               }     
-                           }
-                           TempX = X;
-                           TempY = Y;
-                           TempZ = S;
-                           if(X < 9 && Y < 9)
-                           {
-                               while(TempX < 9 && TempY < 9 && simulation[TempZ][TempY + 1][TempX + 1] == Team)
-                               {
-                                   SearchValue = SearchValue + 1;
-                                   TempX = TempX + 1;
-                                   TempY = TempY + 1;
-                               }
-                           }
-                           TempX = X;
-                           TempY = Y;
-                           TempZ = S;
-                           //System.out.println("TEST" + Z);
-                           //FinalValue = SearchValue;
-                           if( ran == 1)
-                           {
-                               Leaf myLeaf = new Leaf(S,Y,X,SearchValue);
-                               LeafTree[tracker] = myLeaf;
-                           }
-                           else
-                           {
-                               LeafTree[tracker].setValue(SearchValue);
-                               LeafTree[tracker].setX(X);
-                               LeafTree[tracker].setY(Y);
-                               LeafTree[tracker].setZ(S);
-                           }
-                           tracker = tracker + 1;
-                           if(simulation[S][Y][X] == '#')
-                           {
-                               if(SearchValue >= FinalValue)
-                               {
-                                   FinalX = X;
-                                   FinalY = Y;
-                                   FinalZ = S; 
-                                   FinalValue = SearchValue;
-                               }
-                               else
-                               {
-                                   
-                               }
-                           }
-                           //System.out.println(LeafTree[tracker].getZ() + " " + LeafTree[tracker].getX() + " " + LeafTree[tracker].getY() + " " + LeafTree[tracker].getValue());
-                           Searching = true;
-                       }
-                    }
+                    Place(AIX,AIY,Team);
+                    repaint();
+                    return true;
                 }
             }
-       ran = 42;
-       for(int Q = 0; Q < 100; Q++)
-       {
-           int FX = LeafTree[Q].getX();
-           int FY = LeafTree[Q].getZ();
-           int FZ = LeafTree[Q].getZ();
-           int FV = LeafTree[Q].getValue();
-           int FT = 0;
-           if(FV > FT)
-           {
-               simulation[FZ][FY][FX] = this.Team;
-           }
-       }
-       //simulation[FinalZ][FinalY][FinalX] = this.Team;
-       repaint();
+        }
+        return false;
     }
 
 
