@@ -34,7 +34,7 @@ public class ConnectGUI extends JApplet
     int FinalValue = 0;
     int counter = 0;
     public int turn = 0;
-    
+    int ran = 1;
     
     
     boolean ThisGame = false;
@@ -542,8 +542,19 @@ public class ConnectGUI extends JApplet
                            TempZ = S;
                            //System.out.println("TEST " + Z);
                            //FinalValue = SearchValue;
-                           Leaf myLeaf = new Leaf(S,Y,X,SearchValue);
-                           LeafTree[tracker] = myLeaf;
+                           if(ran == 1)
+                           {
+                               Leaf myLeaf = new Leaf(S,Y,X,SearchValue);
+                               LeafTree[tracker] = myLeaf;
+                           }
+                           else
+                           {
+                               LeafTree[tracker].setValue(SearchValue);
+                               LeafTree[tracker].setX(X);
+                               LeafTree[tracker].setY(Y);
+                               LeafTree[tracker].setZ(S);
+                           }
+                           tracker = tracker + 1;
                            if(simulation[S][Y][X] == '#')
                            {
                                if(SearchValue >= FinalValue)
@@ -749,9 +760,19 @@ public class ConnectGUI extends JApplet
                            TempZ = S;
                            //System.out.println("TEST" + Z);
                            //FinalValue = SearchValue;
-                           Leaf myLeaf = new Leaf(S,Y,X,SearchValue);
-                           //System.out.println(myLeaf.getX());
-                           LeafTree[tracker] = myLeaf;
+                           if( ran == 1)
+                           {
+                               Leaf myLeaf = new Leaf(S,Y,X,SearchValue);
+                               LeafTree[tracker] = myLeaf;
+                           }
+                           else
+                           {
+                               LeafTree[tracker].setValue(SearchValue);
+                               LeafTree[tracker].setX(X);
+                               LeafTree[tracker].setY(Y);
+                               LeafTree[tracker].setZ(S);
+                           }
+                           tracker = tracker + 1;
                            if(simulation[S][Y][X] == '#')
                            {
                                if(SearchValue >= FinalValue)
@@ -772,7 +793,20 @@ public class ConnectGUI extends JApplet
                     }
                 }
             }
-       simulation[FinalZ][FinalY][FinalX] = this.Team;
+       ran = 42;
+       for(int Q = 0; Q < 100; Q++)
+       {
+           int FX = LeafTree[Q].getX();
+           int FY = LeafTree[Q].getZ();
+           int FZ = LeafTree[Q].getZ();
+           int FV = LeafTree[Q].getValue();
+           int FT = 0;
+           if(FV > FT)
+           {
+               simulation[FZ][FY][FX] = this.Team;
+           }
+       }
+       //simulation[FinalZ][FinalY][FinalX] = this.Team;
        repaint();
     }
 
