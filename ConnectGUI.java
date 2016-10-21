@@ -28,13 +28,8 @@ public class ConnectGUI extends JApplet
     boolean Searching;
     Leaf LeafTree[] = new Leaf[500];
     public char[][][] simulation = new char[10][10][10];
-    int FinalX = 0;
-    int FinalY = 0;
-    int FinalZ = 0;
-    int FinalValue = 0;
     int counter = 0;
     public int turn = 0;
-    int ran = 1;
     int S = 1;
     
     boolean ThisGame = false;
@@ -48,9 +43,6 @@ public class ConnectGUI extends JApplet
             {
                 AI('R');
                 AI('G');
-                AI('B');
-                AI('Y');
-                AI('O');
             }
         }
     }
@@ -445,7 +437,7 @@ public class ConnectGUI extends JApplet
     boolean Place(int x, int y, char Team)
     {
         int zed = 0;
-        while(simulation[zed][y][x] != '#' && zed < 10)
+        while(zed < 10 && simulation[zed][y][x] != '#')
         {
             zed = zed + 1;
         }
@@ -457,26 +449,225 @@ public class ConnectGUI extends JApplet
         else
         {
             return false;
+    	}
+    }
+
+    int FindZ(int x, int y)
+    {
+        int zed = 0;
+        while(zed < 10 && simulation[zed][y][x] != '#' )
+        {
+            zed = zed + 1;
         }
+        return zed;
     }
     
     //Very Simple AI, just does rows. Its a start.
     boolean AI(char Team)
     {
+        Graphics g = getGraphics();
+        int TestValue = 1;
+        int FinalValue = 0;
+        int FX = 0;
+        int FY = 0;
         for(int AIX = 0; AIX < 10; AIX = AIX + 1)
         {
             for(int AIY = 0; AIY < 10; AIY = AIY + 1)
             {
                 if(Legal(AIX,AIY))
                 {
-                    Place(AIX,AIY,Team);
-                    repaint();
-                    return true;
+                    int zed = FindZ(AIX,AIY);
+                    TestValue = TestValue + LeftFind(AIX,AIY,zed,Team) + RightFind(AIX,AIY,zed,Team) + UpFind(AIX,AIY,zed,Team) + DownFind(AIX,AIY,zed,Team) + UpRightFind(AIX,AIY,zed,Team)
+                    + UpLeftFind(AIX,AIY,zed,Team) + DownRightFind(AIX,AIY,zed,Team) + DownLeftFind(AIX,AIY,zed,Team);
+                    if(TestValue > FinalValue)
+                    {
+                        FinalValue = TestValue;
+                        FX = AIX;
+                        FY = AIY;
+                    }
                 }
             }
         }
-        return false;
+        Place(FX,FY,Team);
+        repaint();
+        return true;
+        //return false;
     }
-
-
+    
+    int LeftFind(int x, int y, int z, char Team)
+    {
+        SearchValue = 0;
+        if(x - 1 > 0)
+        {
+            if((x - 1) > 0)
+            {
+                while(x > 0 && simulation[z][x - 1][y] == Team)
+                {
+                    SearchValue = SearchValue + 1;
+                    x = x - 1;
+                    if(x == 0)
+                    {
+                        return SearchValue;
+                    }
+                }
+            }
+            else
+            {
+                return SearchValue;
+            }
+        }   
+        return SearchValue;
     }
+    
+    int RightFind(int x, int y, int z, char Team)
+    {
+        SearchValue = 0;
+        if((x + 1) < 10)
+        {
+            while(x < 9 && simulation[z][x + 1][y] == Team)
+            {
+                if(x+1 < 10)
+                {
+                    SearchValue = SearchValue + 1;
+                    x = x + 1;
+                }
+                else
+                {
+                    return SearchValue;
+                }
+            }
+        }
+        return SearchValue;
+    }
+    
+    
+    int UpFind(int x, int y, int z, char Team)
+    {
+        SearchValue = 0;
+        if((y + 1) < 10)
+        {
+            while( y < 9 && simulation[z][x][y + 1] == Team)
+            {
+                if((y + 1) < 10)
+                {
+                    SearchValue = SearchValue + 1;
+                    y = y + 1;
+                }
+                else
+                {
+                    return SearchValue;
+                }
+            }
+        }
+        return SearchValue;
+    }
+    
+    int DownFind(int x, int y, int z, char Team)
+    {
+        SearchValue = 0;
+        if((y - 1) > 0)
+        {
+            while(y > 0 && simulation[z][x][y - 1] == Team)
+            {
+                if((y - 1) > 0)
+                {
+                    SearchValue = SearchValue + 1;
+                    y = y - 1;
+                }
+                else
+                {
+                    return SearchValue;
+                }
+            }
+        }
+        return SearchValue;
+    }
+    
+    int UpLeftFind(int x, int y, int z, char Team)
+    {
+        SearchValue = 0;
+        if(((y - 1) >= 0) && ((x - 1) >= 0))
+        {
+            while((y > 0 && x > 0) && simulation[z][x - 1][y - 1] ==Team)
+            {
+                if(((y - 1) > 0) && ((x - 1) > 0))
+                { 
+                    SearchValue = SearchValue + 1;
+                    x = x - 1;
+                    y = y - 1;
+                }
+                else
+                {
+                    return SearchValue;
+                }
+            }
+        }
+        return SearchValue;
+    }
+    
+    int UpRightFind(int x, int y, int z, char Team)
+    {
+        SearchValue = 0;
+        if(((y - 1) >= 0) && ((x + 1) < 10))
+        {
+            while((x < 9 && y > 0) && simulation[z][x + 1][y - 1] == Team)
+            {
+                if(((y - 1) > 0) && ((x + 1) < 10))
+                {
+                    SearchValue = SearchValue + 1;
+                    x = x + 1;
+                    y = y - 1;
+                }
+                else
+                {
+                    return SearchValue;
+                }
+            } 
+        }
+        return SearchValue;
+        
+    }
+    int DownLeftFind(int x, int y, int z, char Team)
+    {
+        SearchValue = 0;
+        if(((y + 1) < 10) && ((x - 1) > 0))
+        {
+            while(( y < 9 && x > 0) && simulation[z][x - 1][y + 1] == Team)
+            {
+                if(((y + 1) < 10) && ((x - 1) > 0))
+                {
+                    SearchValue = SearchValue + 1;
+                    x = x - 1;
+                    y = y + 1;
+                }
+                else
+                {
+                    return SearchValue;
+                }
+            }
+        }
+        return SearchValue;
+    }
+        
+    int DownRightFind(int x, int y, int z, char Team)
+    {
+        SearchValue = 0;
+        if(((y + 1) < 10) && ((x + 1) < 10))
+        {
+            while((y < 9 && x < 9) && simulation[z][x + 1][y + 1] == Team)
+            {
+                if(((y + 1) < 10) && ((x + 1) < 10))
+                {
+                    SearchValue = SearchValue + 1;
+                    x = x + 1;
+                    y = y + 1;
+                }
+                else
+                {
+                    return SearchValue;
+                }
+            }
+        }
+        return SearchValue;
+    }
+}
