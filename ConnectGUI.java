@@ -1,3 +1,4 @@
+import java.util.Arrays;
 import java.awt.*;
 import javax.swing.*;
 import java.awt.event.MouseListener;
@@ -31,22 +32,67 @@ public class ConnectGUI extends JApplet
     int counter = 0;
     public int turn = 0;
     int S = 1;
+    int TIME = 0;
+    int AI1 = 0;
+    int AI2 = 0;
+    int AI3 = 0;
+    int AI4 = 0;
+    int AI5 = 0;
     
-    boolean ThisGame = false;
+    // CHECKER VARIABLES
+    private Stack data = new Stack(5);
+    private int rows=10;
+    private int col=10;
+    private int depth=10;
+    private boolean valid = true;
+    
+    boolean ThisGame = true;
     //End variables
     private class ButtonListener implements ActionListener
     {
         public void actionPerformed(ActionEvent e)
         {
             Graphics g = getGraphics();
-            for(int x = 0; x < 1000; x++)
+            while(ThisGame == true)
             {
-                AI('R');
-                AI('G');
+               if(AI('R'))
+               {
+                   g.setColor(Color.red);
+                   g.fillRect(0,0,100,100);
+                   ThisGame = false;
+                   break;
+               }
+               if(AI('G'))
+               {
+                   g.setColor(Color.red);
+                   g.fillRect(0,0,100,100);
+                   ThisGame = false;
+                   break;
+               }
+               if(AI('B'))
+               {
+                   g.setColor(Color.red);
+                   g.fillRect(0,0,100,100);
+                   ThisGame = false;
+                   break;
+               }
+               if(AI('Y'))
+               {
+                   g.setColor(Color.red);
+                   g.fillRect(0,0,100,100);
+                   ThisGame = false;
+                   break;
+               }
+               if(AI('O'))
+               {
+                   g.setColor(Color.red);
+                   g.fillRect(0,0,100,100);
+                   ThisGame = false;
+                   break;
+               }
             }
         }
-    }
-     
+    }       
 
     ButtonListener aButtonListener = new ButtonListener();
 
@@ -60,7 +106,7 @@ public class ConnectGUI extends JApplet
                 {
                     for(Y = 0; Y < 10; Y++)
                     {
-                        simulation[Z][X][Y] = '#';
+                        simulation[X][Y][Z] = '#';
                     }
                 }
             }
@@ -108,9 +154,9 @@ public class ConnectGUI extends JApplet
                     Team = 'O';
                 }
                 
-                if(simulation[z][c][h] == '#')
+                if(simulation[h][c][z] == '#')
                 {
-                    simulation[z][c][h] = Team;
+                    simulation[h][c][z] = Team;
                     if(turn == 0)
                     {
                         turn = 1;
@@ -132,34 +178,13 @@ public class ConnectGUI extends JApplet
                         turn = 0;
                     }
                 }
-                else if(simulation[z][c][h] != '#' && z < 10)
+                else if(simulation[h][c][z] != '#' && z < 10)
                 {
-                    if(turn == 0)
-                    {
-                        turn = 1;
-                    }
-                    else if(turn == 1)
-                    {
-                        turn = 2;
-                    }
-                    else if(turn == 2)
-                    {
-                        turn = 3;
-                    }
-                    else if(turn == 3)
-                    {
-                        turn = 4;
-                    }
-                    else
-                    {
-                        turn = 0;
-                    }
-                    
-                    while(simulation[z][c][h] != '#' && z < 10)
+                    while(simulation[h][c][z] != '#' && z < 10)
                     {
                         z = z + 1;
                     }
-                    simulation[z][c][h] = Team;
+                    simulation[h][c][z] = Team;
                 }
                 else
                 {
@@ -250,18 +275,18 @@ public class ConnectGUI extends JApplet
     public void paint(Graphics g)
     {
         // simple text displayed on applet
-        //Base board
+        //Base simulation
         g.setColor(MenuColor);
         g.fillRect(0,0,1000,1000);
         
         //Move Updater - Needs to be second.
-        for(Z = 0;Z < 10; Z++)
+        for(X = 0;X < 10; X++)
        {
-           for(X = 0;X < 10;X++)
+           for(Y = 0;Y < 10;Y++)
            {
-               for(Y = 0; Y < 10; Y++)
+               for(Z = 0; Z < 10; Z++)
                {
-                   if(simulation[Z][Y][X] == 'R')
+                   if(simulation[X][Y][Z] == 'R')
                    {
                        g.setColor(Color.red);
                        if(Z < 5)
@@ -275,7 +300,7 @@ public class ConnectGUI extends JApplet
                      
                        }
                    }
-                   else if(simulation[Z][Y][X] == 'G')
+                   else if(simulation[X][Y][Z] == 'G')
                    {
                        g.setColor(Color.green); 
                        if(Z < 5)
@@ -289,7 +314,7 @@ public class ConnectGUI extends JApplet
                      
                        }
                    }
-                   else if(simulation[Z][Y][X] == 'B')
+                   else if(simulation[X][Y][Z] == 'B')
                    {
                        g.setColor(Color.blue); 
                        if(Z < 5)
@@ -303,7 +328,7 @@ public class ConnectGUI extends JApplet
                      
                        }
                    }
-                   else if(simulation[Z][Y][X] == 'Y')
+                   else if(simulation[X][Y][Z] == 'Y')
                    {
                        g.setColor(Color.yellow); 
                        if(Z < 5)
@@ -317,7 +342,7 @@ public class ConnectGUI extends JApplet
                      
                        }
                    }
-                   else if(simulation[Z][Y][X] == 'O')
+                   else if(simulation[X][Y][Z] == 'O')
                    {
                        g.setColor(Color.orange); 
                        if(Z < 5)
@@ -419,12 +444,12 @@ public class ConnectGUI extends JApplet
     }
     
     char getAt(int x, int y, int z) {
-        return simulation[z][y][x];
+        return simulation[x][y][z];
     }
     
     boolean Legal(int x , int y)
     {
-        if(simulation[9][y][x] == '#')
+        if(simulation[x][y][9] == '#')
         {
             return true;
         }
@@ -437,25 +462,25 @@ public class ConnectGUI extends JApplet
     boolean Place(int x, int y, char Team)
     {
         int zed = 0;
-        while(zed < 10 && simulation[zed][y][x] != '#')
+        while(zed < 10 && simulation[x][y][zed] != '#')
         {
             zed = zed + 1;
         }
         if(zed < 10)
         {
-            simulation[zed][y][x] = Team;
+            simulation[x][y][zed] = Team;
             return true;
         }
         else
         {
             return false;
-    	}
+        }
     }
 
     int FindZ(int x, int y)
     {
         int zed = 0;
-        while(zed < 10 && simulation[zed][y][x] != '#' )
+        while(zed < 10 && simulation[x][y][zed] != '#' )
         {
             zed = zed + 1;
         }
@@ -470,13 +495,14 @@ public class ConnectGUI extends JApplet
         int FinalValue = 0;
         int FX = 0;
         int FY = 0;
+        int zed = 0;
         for(int AIX = 0; AIX < 10; AIX = AIX + 1)
         {
             for(int AIY = 0; AIY < 10; AIY = AIY + 1)
             {
                 if(Legal(AIX,AIY))
                 {
-                    int zed = FindZ(AIX,AIY);
+                    zed = FindZ(AIX,AIY);
                     TestValue = TestValue + LeftFind(AIX,AIY,zed,Team) + RightFind(AIX,AIY,zed,Team) + UpFind(AIX,AIY,zed,Team) + DownFind(AIX,AIY,zed,Team) + UpRightFind(AIX,AIY,zed,Team)
                     + UpLeftFind(AIX,AIY,zed,Team) + DownRightFind(AIX,AIY,zed,Team) + DownLeftFind(AIX,AIY,zed,Team);
                     if(TestValue > FinalValue)
@@ -490,7 +516,7 @@ public class ConnectGUI extends JApplet
         }
         Place(FX,FY,Team);
         repaint();
-        return true;
+        return check(FX,FY,zed,Team);
         //return false;
     }
     
@@ -670,4 +696,416 @@ public class ConnectGUI extends JApplet
         }
         return SearchValue;
     }
+    
+    //CHECKER STUFF
+    public int getASize() {return data.getSize();}
+    
+        public boolean isAdjacent(int x, int y, int z, char c) {
+        try{
+            if (simulation[x][y][z] == c) {
+                return true;
+            }
+            else return false;
+        }
+        catch (ArrayIndexOutOfBoundsException ex){return false;}
+    }
+
+    public boolean isOut(int x, int y, int z){
+        if (x>=rows || x<0)return true;
+        else if (y>=col || y<0) return true;
+        else if (z>=depth || z<0) return true;
+        else return false;
+    }
+
+    /*
+    Checks the x direction for a win condition.
+     */
+    public boolean checkX(int x, int y, int z, char c){
+        int track = 0;
+        for (int a = 1; a <= 4; a++) {
+            if (isAdjacent((x + a), y, z, c)) {
+                data.push(simulation[(x + a)][y][z]);
+            }
+            else if (isOut((x+a),y,z)){
+                track = 1;
+                break;
+            }
+            else break;
+        }
+        if (track == 1){
+            int temp = getASize();
+            for(int t = 0; t<(5-temp);t++){
+                if (isAdjacent(t,y,z,c)){
+                    data.push(simulation[t][y][z]);
+                }
+            }
+        }
+        if (getASize()==5) {return true;}
+        else {
+            int temp = getASize();
+            for (int b = 1; b <= (5-temp); b++) {
+                if (isAdjacent((x - b), y, z, c)) {
+                    data.push(simulation[(x - b)][y][z]);
+                }
+                else if (isOut((x-b),y,z)){
+                    track = 2;
+                    break;
+                }
+                else break;
+            }
+            if (track==2){
+                temp = getASize();
+                for(int t = (rows-1); t>((rows-1)-(5-temp));t--){
+                    if (isAdjacent(t,y,z,c)){
+                        data.push(simulation[t][y][z]);
+                    }
+                }
+            }
+            if (getASize() == 5) return true;
+            else {
+                data.clear();
+                data.push(simulation[x][y][z]);
+                return false;
+            }
+        }
+    }
+
+    /*
+    Checks y direction for win condition.
+     */
+    public boolean checkY(int x, int y, int z, char c){
+        int track = 0;
+        for (int a = 1; a <= 4; a++) {
+            if (isAdjacent(x, (y+a), z, c)) {
+                data.push(simulation[x][(y+a)][z]);
+            }
+            else if (isOut(x,(y+a),z)){
+                track = 1;
+                break;
+            }
+            else break;
+        }
+        if (track == 1){
+            int temp = getASize();
+            for(int t = 0; t<(5-temp);t++){
+                if (isAdjacent(x,t,z,c)){
+                    data.push(simulation[x][t][z]);
+                }
+            }
+        }
+        if (getASize()==5) return true;
+        else {
+            int temp = getASize();
+            for (int b = 1; b <= (5-temp); b++) {
+                if (isAdjacent(x, (y-b), z, c)) {
+                    data.push(simulation[x][(y-b)][z]);
+                }
+                else if (isOut(x,(y-b),z)){
+                    track = 2;
+                    break;
+                }
+                else break;
+            }
+            if (track==2){
+                temp = getASize();
+                for(int t = (rows-1); t>((rows-1)-(5-temp));t--){
+                    if (isAdjacent(x,t,z,c)){
+                        data.push(simulation[x][t][z]);
+                    }
+                }
+            }
+            if (getASize() == 5) return true;
+            else {
+                data.clear();
+                data.push(simulation[x][y][z]);
+                return false;
+            }
+        }
+    }
+
+    /*
+    Checks z direction for win condition.
+     */
+    public boolean checkZ(int x, int y, int z, char c){
+        int track = 0;
+        for (int a = 1; a <= 4; a++) {
+            if (isAdjacent(x, y, (z-a), c)) {
+                data.push(simulation[x][y][(z-a)]);
+            }
+            else break;
+        }
+
+        if (getASize()==5) return true;
+        else {
+            int temp = getASize();
+            if (isOut(x,y,(z+1))){
+                for (int b = 0; b<(5-temp); b++){
+                    if (isAdjacent(x,y,b,c)){
+                        data.push(simulation[x][y][b]);
+                    }
+                }
+            }
+            if(getASize()==5) return true;
+            else{
+                data.clear();
+                data.push(simulation[x][y][z]);
+                return false;
+            }
+        }
+    }
+
+    /*
+    Checks diagonal directions for win condition.
+     */
+    public boolean checkXD(int x, int y, int z, char c) {
+        int track = 0;
+        for (int a = 1; a <= 4; a++) {
+            if (isAdjacent((x + a), y, (z + a), c)) {
+                data.push(simulation[(x + a)][y][(z + a)]);
+            }
+            else if (isOut((x+a),y,z) && isOut(x,y,(z+a))){
+                track = 1;
+                break;
+            }
+            else break;
+        }
+        if (track == 1){
+            int temp = getASize();
+            for(int t = 0; t<(5-temp);t++){
+                if (isAdjacent(t,y,t,c)){
+                    data.push(simulation[t][y][t]);
+                }
+                else break;
+            }
+        }
+        if (getASize() == 5) return true;
+        else {
+            int temp = getASize();
+            for (int b = 1; b <= (5-temp); b++) {
+                if (isAdjacent((x - b), y, (z-b), c)) {
+                    data.push(simulation[(x - b)][y][(z-b)]);
+                }
+                else if (isOut((x-b),y,z) && isOut(x,y,(z-b))){
+                    track = 2;
+                    break;
+                }
+                else break;
+            }
+            if(track==2){
+                for(int t = (rows-1); t > ((rows-1)-(5-temp));t++){
+                    if(isAdjacent(t,y,t,c)){
+                        data.push(simulation[t][y][t]);
+                    }
+                    else break;
+                }
+            }
+            if (getASize() == 5) return true;
+            else {
+                data.clear();
+                data.push(simulation[x][y][z]);
+                for (int a = 1; a <= 4; a++) {
+                    if (isAdjacent((x + a), y, (z - a), c)) {
+                        data.push(simulation[(x + a)][y][(z - a)]);
+                    }
+                    else if (isOut((x+a),y,z) && isOut(x,y,(z-a))){
+                        track = 3;
+                    }
+                    else break;
+                }
+                if (track == 3){
+                    for(int t = (rows-1); t > ((rows-1)-(5-temp));t++){
+                        if(isAdjacent(t,y,t,c)){
+                            data.push(simulation[t][y][t]);
+                        }
+                        else break;
+                    }
+                }
+                if (getASize() == 5) return true;
+                else {
+                    temp = getASize();
+                    for (int b = 1; b <= (5-temp); b++) {
+                        if (isAdjacent((x - b), y, (z+b), c)) {
+                            data.push(simulation[(x - b)][y][(z+b)]);
+                        }
+                    }
+                }
+                if (getASize() == 5) return true;
+                else return false;
+            }
+        }
+    }
+
+    public boolean checkYD(int x, int y, int z, char c) {
+        int track = 0;
+        for (int a = 1; a <= 4; a++) {
+            if (isAdjacent(x + a, (y+a), (z + a), c)) {
+                data.push(simulation[x][(y+a)][(z + a)]);
+            }
+            else if (isOut(x,(y+a),z) && isOut(x,y,(z+a))){
+                track = 1;
+                break;
+            }
+            else break;
+        }
+        if (track == 1){
+            int temp = getASize();
+            for(int t = 0; t<(5-temp);t++){
+                if (isAdjacent(x,t,t,c)){
+                    data.push(simulation[x][t][t]);
+                }
+                else break;
+            }
+        }
+        if (getASize() == 5) return true;
+        else {
+            int temp = getASize();
+            for (int b = 1; b <= (5-temp); b++) {
+                if (isAdjacent(x, (y-b), (z-b), c)) {
+                    data.push(simulation[x][(y-b)][(z-b)]);
+                }
+                else if (isOut(x,(y-b),z) && isOut(x,y,(z-b))){
+                    track = 2;
+                    break;
+                }
+                else break;
+            }
+            if(track==2){
+                for(int t = (col-1); t< ((col-1)-(5-temp));t++){
+                    if(isAdjacent(x,t,t,c)){
+                        data.push(simulation[x][t][t]);
+                    }
+                    else break;
+                }
+            }
+            if (getASize() == 5) return true;
+            else {
+                data.clear();
+                data.push(simulation[x][y][z]);
+                for (int a = 1; a <= 4; a++) {
+                    if (isAdjacent(x, (y+a), (z - a), c)) {
+                        data.push(simulation[x][(y+a)][(z - a)]);
+                    }
+                    else if (isOut(x,(y+a),z) && isOut(x,y,(z-a))){
+                        track = 3;
+                    }
+                    else break;
+                }
+                if (getASize() == 5) return true;
+                else {
+                    temp = getASize();
+                    for (int b = 1; b <= (5-temp); b++) {
+                        if (isAdjacent(x, (y-b), (z+b), c)) {
+                            data.push(simulation[x][(y-b)][(z+b)]);
+                        }
+                        else break;
+                    }
+                }
+                if (getASize() == 5) return true;
+                else return false;
+            }
+        }
+    }
+
+
+    public boolean checkXYD(int x, int y, int z, char c){
+        for (int a = 1; a <= 4; a++) {
+            if (isAdjacent((x + a), (y+a), (z + a), c)) {
+                data.push(simulation[(x + a)][(y+a)][(z + a)]);
+            }
+        }
+        if (getASize() == 5) return true;
+        else {
+            int temp = getASize();
+            for (int b = 1; b <= (5-temp); b++) {
+                if (isAdjacent((x-b),(y-b),(z-b), c)) {
+                    data.push(simulation[(x-b)][(y-b)][(z-b)]);
+                }
+            }
+            if (getASize() == 5) return true;
+            else {
+                data.clear();
+                data.push(simulation[x][y][z]);
+                for (int a = 1; a <= 4; a++) {
+                    if (isAdjacent((x+a),(y+a),(z-a), c)) {
+                        data.push(simulation[(x+a)][(y+a)][(z-a)]);
+                    }
+                }
+                if (getASize() == 5) return true;
+                else {
+                    temp = getASize();
+                    for (int b = 1; b <= (5-temp); b++) {
+                        if (isAdjacent((x-b),(y-b),(z+b), c)) {
+                            data.push(simulation[(x-b)][(y-b)][(z+b)]);
+                        }
+                    }
+                }
+                if (getASize() == 5) return true;
+                else {
+                    data.clear();
+                    data.push(simulation[x][y][z]);
+                    for (int a = 1; a <= 4; a++) {
+                        if (isAdjacent((x+a),(y-a),(z+a), c)) {
+                            data.push(simulation[(x+a)][(y-a)][(z+a)]);
+                        }
+                    }
+                    if (getASize() == 5) return true;
+                    else {
+                        temp = getASize();
+                        for (int b = 1; b <= (5-temp); b++) {
+                            if (isAdjacent((x-b),(y+b),(z-b), c)) {
+                                data.push(simulation[(x-b)][(y+b)][(z-b)]);
+                            }
+                        }
+                    }
+                    if (getASize() == 5) return true;
+                    else{
+                        data.clear();
+                        data.push(simulation[x][y][z]);
+                        for (int a = 1; a <= 4; a++) {
+                            if (isAdjacent((x-a),(y+a),(z+a), c)) {
+                                data.push(simulation[(x-a)][(y+a)][(z+a)]);
+                            }
+                        }
+                        if (getASize() == 5) return true;
+                        else {
+                            temp = getASize();
+                            for (int b = 1; b <= (5-temp); b++) {
+                                if (isAdjacent((x+b),(y-b),(z-b), c)) {
+                                    data.push(simulation[(x+b)][(y-b)][(z-b)]);
+                                }
+                            }
+                        }
+                        if (getASize() == 5) return true;
+                        else return false;
+                    }
+                }
+            }
+        }
+    }
+
+    /*
+    Uses previous methods to check all directions for win condition.
+    */
+    public boolean check(int x, int y, int z, char c) {
+        try {
+            if (simulation[x][y][z] == c) {
+                data.push(simulation[x][y][z]);
+                if (checkX(x, y, z, c)) return true;
+                else if (checkY(x, y, z, c)) return true;
+                else if (checkZ(x, y, z, c)) return true;
+                else if (checkXD(x, y, z, c)) return true;
+                else if (checkYD(x, y, z, c))return true;
+                else if (checkXYD(x, y, z, c)) return true;
+                else {
+                    data.clear();
+                    return false;
+                }
+            } else {
+                data.clear();
+                return false;
+            }
+        }catch(ArrayIndexOutOfBoundsException ex){return false;}
+    }
+
+    
 }
