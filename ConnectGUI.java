@@ -15,6 +15,7 @@ public class ConnectGUI extends JApplet
 {
     // instance variables - replace the example below with your own
     Color MenuColor = new Color(245,222,179);
+    Color WIN = new Color(125,15,105);
     Color Bars = new Color(234, 147, 249);
     // These control the Solvers!
     int X;
@@ -28,23 +29,26 @@ public class ConnectGUI extends JApplet
     int tracker;
     boolean Searching;
     Leaf LeafTree[] = new Leaf[500];
-    int BoardSize = 10;
-    public char[][][] simulation = new char[BoardSize][BoardSize][BoardSize];
+    public char[][][] simulation = new char[10][10][10];
     int counter = 0;
     public int turn = 0;
     int S = 1;
     int TIME = 0;
-    int AI1 = 42;
+    int AI1 = 0;
     int AI2 = 0;
     int AI3 = 0;
     int AI4 = 0;
     int AI5 = 0;
+    int BoardSize = 10;
     boolean AIDone = false;
-
+    
     // CHECKER VARIABLES
     private Stack data = new Stack(5);
+    private int rows=10;
+    private int col=10;
+    private int depth=10;
     private boolean valid = true;
-
+    
     boolean ThisGame = true;
     //End variables
     private class ButtonListener implements ActionListener
@@ -54,11 +58,10 @@ public class ConnectGUI extends JApplet
             Graphics g = getGraphics();
             String boardSize = JOptionPane.showInputDialog(myFrame, "Enter A floor Size ( 5 - 10)");
             BoardSize = Integer.parseInt(boardSize);
-            g.drawString("" + BoardSize,200,400);
             simulation = Arrays.copyOf(simulation, BoardSize);
         }
     }
-
+          
 
     ButtonListener aButtonListener = new ButtonListener();
 
@@ -78,12 +81,12 @@ public class ConnectGUI extends JApplet
             }
         }
     }
-
+     
     ClearButtonListener clear = new ClearButtonListener();
-
+    
     private class MousePressedListener implements MouseListener
     {
-
+        
         public void mousePressed(MouseEvent e)
         {
             int i = e.getX();
@@ -110,6 +113,7 @@ public class ConnectGUI extends JApplet
                     {
                         if(AI('R'))
                         {
+                            
                             AIDone = true;
                         }
                         else
@@ -117,7 +121,7 @@ public class ConnectGUI extends JApplet
                             turn = 1;
                         }
                     }
-                    else
+                    else if(AI1 == 1)
                     {
                         if(simulation[h][c][z] == '#')
                         {
@@ -125,6 +129,8 @@ public class ConnectGUI extends JApplet
                             simulation[h][c][z] = Team;
                             if(check(h,c,z,Team))
                             {
+                                simulation[h][c][z] = 'W';
+                                repaint();
                                 AIDone = true;
                             }
                             else
@@ -138,20 +144,30 @@ public class ConnectGUI extends JApplet
                             {
                                 z = z + 1;
                             }
-                            simulation[h][c][z] = Team;
-                            if(check(h,c,z,Team))
+                            if(z != BoardSize)
                             {
-                                AIDone = true;
-                            }
-                            else
-                            {
-                                turn = 1;
+                                simulation[h][c][z] = Team;
+                                if(check(h,c,z,Team))
+                                {
+                                    simulation[h][c][z] = 'W';
+                                    repaint();
+                                    AIDone = true;
+                                }
+                                else
+                                {
+                                    turn = 1;
+                                }
                             }
                         }
                         else
                         {
                             //simulation[0][1][1] = 'R';
+                            
                         }
+                    }
+                    else
+                    {
+                        turn = 1;
                     }
                 }
                 else if(turn == 1)
@@ -168,7 +184,7 @@ public class ConnectGUI extends JApplet
                             turn = 2;
                         }
                     }
-                    else
+                    else if(AI2 == 1)
                     {
                         if(simulation[h][c][z] == '#')
                         {
@@ -176,6 +192,8 @@ public class ConnectGUI extends JApplet
                             simulation[h][c][z] = Team;
                             if(check(h,c,z,Team))
                             {
+                                simulation[h][c][z] = 'W';
+                                repaint();
                                 AIDone = true;
                             }
                             else
@@ -189,20 +207,29 @@ public class ConnectGUI extends JApplet
                             {
                                 z = z + 1;
                             }
-                            simulation[h][c][z] = Team;
-                            if(check(h,c,z,Team))
+                            if(z != BoardSize)
                             {
-                                AIDone = true;
-                            }
-                            else
-                            {
-                                turn = 2;
+                                simulation[h][c][z] = Team;
+                                if(check(h,c,z,Team))
+                                {
+                                    simulation[h][c][z] = 'W';
+                                    repaint();
+                                    AIDone = true;
+                                }
+                                else
+                                {
+                                    turn = 2;
+                                }
                             }
                         }
                         else
                         {
                             //simulation[0][1][1] = 'R';
                         }
+                    }
+                    else
+                    {
+                        turn = 2;
                     }
                 }
                 else if(turn == 2)
@@ -212,6 +239,8 @@ public class ConnectGUI extends JApplet
                     {
                         if(AI('B'))
                         {
+                            simulation[h][c][z] = 'W';
+                            repaint();
                             AIDone = true;
                         }
                         else
@@ -219,7 +248,7 @@ public class ConnectGUI extends JApplet
                             turn = 3;
                         }
                     }
-                    else
+                    else if(AI3 == 1)
                     {
                         if(simulation[h][c][z] == '#')
                         {
@@ -227,6 +256,8 @@ public class ConnectGUI extends JApplet
                             simulation[h][c][z] = Team;
                             if(check(h,c,z,Team))
                             {
+                                simulation[h][c][z] = 'W';
+                                repaint();
                                 AIDone = true;
                             }
                             else
@@ -240,20 +271,27 @@ public class ConnectGUI extends JApplet
                             {
                                 z = z + 1;
                             }
-                            simulation[h][c][z] = Team;
-                            if(check(h,c,z,Team))
+                            if(z != BoardSize)
                             {
-                                AIDone = true;
-                            }
-                            else
-                            {
-                                turn = 3;
+                                simulation[h][c][z] = Team;
+                                if(check(h,c,z,Team))
+                                {
+                                    AIDone = true;
+                                }
+                                else
+                                {
+                                    turn = 3;
+                                }
                             }
                         }
                         else
                         {
                             //simulation[0][1][1] = 'R';
                         }
+                    }
+                    else
+                    {
+                        turn = 3;
                     }
                 }
                 else if(turn == 3)
@@ -263,6 +301,8 @@ public class ConnectGUI extends JApplet
                     {
                         if(AI('Y'))
                         {
+                            simulation[h][c][z] = 'W';
+                            repaint();
                             AIDone = true;
                         }
                         else
@@ -270,7 +310,7 @@ public class ConnectGUI extends JApplet
                             turn = 4;
                         }
                     }
-                    else
+                    else if(AI4 == 1)
                     {
                         if(simulation[h][c][z] == '#')
                         {
@@ -278,6 +318,8 @@ public class ConnectGUI extends JApplet
                             simulation[h][c][z] = Team;
                             if(check(h,c,z,Team))
                             {
+                                simulation[h][c][z] = 'W';
+                                repaint();
                                 AIDone = true;
                             }
                             else
@@ -291,20 +333,29 @@ public class ConnectGUI extends JApplet
                             {
                                 z = z + 1;
                             }
-                            simulation[h][c][z] = Team;
-                            if(check(h,c,z,Team))
+                            if(z != BoardSize)
                             {
-                                AIDone = true;
-                            }
-                            else
-                            {
-                                turn = 4;
+                                simulation[h][c][z] = Team;
+                                if(check(h,c,z,Team))
+                                {
+                                    simulation[h][c][z] = 'W';
+                                    repaint();
+                                    AIDone = true;
+                                }
+                                else
+                                {
+                                    turn = 4;
+                                }
                             }
                         }
                         else
                         {
                             //simulation[0][1][1] = 'R';
                         }
+                    }
+                    else
+                    {
+                        turn = 4;
                     }
                 }
                 else
@@ -314,6 +365,8 @@ public class ConnectGUI extends JApplet
                     {
                         if(AI('O'))
                         {
+                            simulation[h][c][z] = 'W';
+                            repaint();
                             AIDone = true;
                         }
                         else
@@ -321,7 +374,7 @@ public class ConnectGUI extends JApplet
                             turn = 0;
                         }
                     }
-                    else
+                    else if(AI5 == 1)
                     {
                         if(simulation[h][c][z] == '#')
                         {
@@ -329,6 +382,8 @@ public class ConnectGUI extends JApplet
                             simulation[h][c][z] = Team;
                             if(check(h,c,z,Team))
                             {
+                                simulation[h][c][z] = 'W';
+                                repaint();
                                 AIDone = true;
                             }
                             else
@@ -342,20 +397,29 @@ public class ConnectGUI extends JApplet
                             {
                                 z = z + 1;
                             }
-                            simulation[h][c][z] = Team;
-                            if(check(h,c,z,Team))
+                            if(z != BoardSize)
                             {
-                                AIDone = true;
-                            }
-                            else
-                            {
-                                turn = 0;
+                                simulation[h][c][z] = Team;
+                                if(check(h,c,z,Team))
+                                {
+                                    simulation[h][c][z] = 'W';
+                                    repaint();
+                                    AIDone = true;
+                                }
+                                else
+                                {
+                                    turn = 0;
+                                }
                             }
                         }
                         else
                         {
                             //simulation[0][1][1] = 'R';
                         }
+                    }
+                    else
+                    {
+                        turn = 0;
                     }
                 }
                 repaint();
@@ -377,43 +441,183 @@ public class ConnectGUI extends JApplet
         public void mouseExited(MouseEvent e)
         {
         }
+     }
+    
+     MousePressedListener myListener = new MousePressedListener();
+     
+    private class AI1ButtonListener implements ActionListener
+    {
+        public void actionPerformed(ActionEvent e) 
+        {
+            Graphics g = getGraphics();
+            if(AI1 == 0)
+            {
+                AI1 = 1;
+            }
+            else if(AI1 == 1)
+            {
+                AI1 = 2;
+            }
+            else
+            {
+                AI1 = 0;
+            }
+            repaint();
+            
+        }
+        
     }
+    AI1ButtonListener AI1mode = new AI1ButtonListener();
 
-    MousePressedListener myListener = new MousePressedListener();
-
+    private class AI2ButtonListener implements ActionListener
+    {
+        public void actionPerformed(ActionEvent e) 
+        {
+            Graphics g = getGraphics();
+            if(AI2 == 0)
+            {
+                AI2 = 1;
+            }
+            else if(AI2 == 1)
+            {
+                AI2 = 2;
+            }
+            else
+            {
+                AI2 = 0;
+            }
+            repaint();
+            
+        }
+        
+    }
+    AI2ButtonListener AI2mode = new AI2ButtonListener();
+    
+    private class AI3ButtonListener implements ActionListener
+    {
+        public void actionPerformed(ActionEvent e) 
+        {
+            Graphics g = getGraphics();
+            if(AI3 == 0)
+            {
+                AI3 = 1;
+            }
+            else if(AI3 == 1)
+            {
+                AI3 = 2;
+            }
+            else
+            {
+                AI3 = 0;
+            }
+            repaint();
+            
+        }
+        
+    }
+    AI3ButtonListener AI3mode = new AI3ButtonListener();
+    
+    
+    private class AI4ButtonListener implements ActionListener
+    {
+        public void actionPerformed(ActionEvent e) 
+        {
+            Graphics g = getGraphics();
+            if(AI4 == 0)
+            {
+                AI4 = 1;
+            }
+            else if(AI4 == 1)
+            {
+                AI4 = 2;
+            }
+            else
+            {
+                AI4 = 0;
+            }
+            repaint();
+            
+        }
+        
+    }
+    AI4ButtonListener AI4mode = new AI4ButtonListener();
+    
+    private class AI5ButtonListener implements ActionListener
+    {
+        public void actionPerformed(ActionEvent e) 
+        {
+            Graphics g = getGraphics();
+            if(AI5 == 0)
+            {
+                AI5 = 1;
+            }
+            else if(AI5 == 1)
+            {
+                AI5 = 2;
+            }
+            else
+            {
+                AI5 = 0;
+            }
+            repaint();
+            
+        }
+        
+    }
+    AI5ButtonListener AI5mode = new AI5ButtonListener();
+    
     JFrame myFrame = new JFrame();
     JPanel aPanel = new JPanel();
-    JButton aButton = new JButton("Set Board Size");
+    JButton aButton = new JButton("Set simulation Size");
     JButton clearButton = new JButton("REFRESH!");
+    JButton AI1Button = new JButton("Player - AI/Player/None");
+    JButton AI2Button = new JButton("Player - AI/Player/None");
+    JButton AI3Button = new JButton("Player - AI/Player/None");
+    JButton AI4Button = new JButton("Player - AI/Player/None");
+    JButton AI5Button = new JButton("Player - AI/Player/None");
 
-    /**
-     * Called by the bBoardSizeer or applet viewer to inform this JApplet that it
+     /**
+     * Called by the browser or applet viewer to inform this JApplet that it
      * has been loaded into the system. It is always called before the first
      * time that the start method is called.
      */
     public void init()
     {
-        // this is a workaround for a security conflict with some bBoardSizeers
+        // this is a workaround for a security conflict with some browsers
         // including some versions of Netscape & Internet Explorer which do
         // not allow access to the AWT system event queue which JApplets do
-        // on startup to check access. May not be necessary with your bBoardSizeerJRootPane rootPane = this.getRootPane();
+        // on startup to check access. May not be necessary with your browserJRootPane rootPane = this.getRootPane();
         JRootPane rootPane = this.getRootPane();
         rootPane.putClientProperty("defeatSystemEventQueueCheck", Boolean.TRUE);
         this.setSize(1002,602);
         aButton.setSize(150,150);
         aButton.addActionListener(aButtonListener);
         clearButton.addActionListener(clear);
+        AI1Button.addActionListener(AI1mode);
+        AI2Button.addActionListener(AI2mode);
+        AI3Button.addActionListener(AI3mode);
+        AI4Button.addActionListener(AI4mode);
+        AI5Button.addActionListener(AI5mode);
         rootPane.add(aButton);
-        aButton.setBounds(400,450,400,50);
+        aButton.setBounds(450,450,200,50);
         rootPane.add(clearButton);
         clearButton.setBounds(450,500,200,50);
+        rootPane.add(AI1Button);
+        AI1Button.setBounds(150,415,200,20);
+        rootPane.add(AI2Button);
+        AI2Button.setBounds(150,445,200,20);
+        rootPane.add(AI3Button);
+        AI3Button.setBounds(150,475,200,20);
+        rootPane.add(AI4Button);
+        AI4Button.setBounds(150,510,200,20);
+        rootPane.add(AI5Button);
+        AI5Button.setBounds(150,545,200,20);
         this.addMouseListener(myListener);
-
         // provide any initialisation necessary for your JApplet
     }
 
     /**
-     * Called by the bBoardSizeer or applet viewer to inform this JApplet that it
+     * Called by the browser or applet viewer to inform this JApplet that it
      * should start its execution. It is called after the init method and
      * each time the JApplet is revisited in a Web page.
      */
@@ -424,7 +628,7 @@ public class ConnectGUI extends JApplet
     }
 
     /**
-     * Called by the bBoardSizeer or applet viewer to inform this JApplet that
+     * Called by the browser or applet viewer to inform this JApplet that
      * it should stop its execution. It is called when the Web page that
      * contains this JApplet has been replaced by another page, and also
      * just before the JApplet is to be destroyed.
@@ -524,9 +728,23 @@ public class ConnectGUI extends JApplet
 
                         }
                     }
+                    else if(simulation[X][Y][Z] == 'W')
+                    {
+                        g.setColor(WIN);
+                        if(Z < 5)
+                        {
+                            g.fillRect((X * 20) + (Z * 200), Y * 20,20,20);
+                        }
+                        else
+                        {
+                            int TZ = Z - 5;
+                            g.fillRect((X * 20) + (TZ * 200),((Y * 20) + 200),20,20);
+
+                        }
+                    }
                     else
                     {
-
+                        
                     }
                 }
             }
@@ -583,7 +801,7 @@ public class ConnectGUI extends JApplet
         g.setFont(new Font("TimesRoman", Font.PLAIN, 20));
         g.drawRect(800,400,200,200);
         g.drawLine(400,400,400,600);
-        g.drawString("Please Click a slpot to the right!",450,430);
+        g.drawString("Please Click a spot to the right!",450,430);
         g.drawString("--------------------------------->",450,450);
 
 
@@ -608,10 +826,9 @@ public class ConnectGUI extends JApplet
         g.fillRect(10,540,20,20);
         g.drawString("Player 5",35,555);
 
-
     }
-
-    char getAt(int x, int y, int z) {
+    
+     char getAt(int x, int y, int z) {
         return simulation[x][y][z];
     }
 
@@ -655,7 +872,7 @@ public class ConnectGUI extends JApplet
         return zed;
     }
 
-    //Very Simple AI, just does BoardSize. Its a start.
+    //Very Simple AI, just does boardSize. Its a start.
     boolean AI(char Team)
     {
         Graphics g = getGraphics();
@@ -684,8 +901,16 @@ public class ConnectGUI extends JApplet
         }
         Place(FX,FY,Team);
         repaint();
-        return check(FX,FY,zed,Team);
-        //return false;
+        if(check(FX,FY,zed,Team))
+        {
+            simulation[FX][FY][zed] = 'W';
+            repaint();
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
     int LeftFind(int x, int y, int z, char Team)
@@ -1251,6 +1476,106 @@ public class ConnectGUI extends JApplet
         }
     }
 
+    public boolean checkXY(int x, int y, int z, char c){
+        int track = 0;
+        for (int a = 1; a <= 4; a++) {
+            if (isAdjacent((x + a), (y+a), z, c)) {
+                data.push(simulation[(x + a)][(y+a)][z]);
+            }
+            else if (isOut((x+a),y,z) && isOut(x,(y+a),z)){
+                track = 1;
+                break;
+            }
+            else break;
+        }
+        if (track == 1){
+            int temp = getASize();
+            for(int t = 0; t<(5-temp);t++){
+                if (isAdjacent(t,t,z,c)){
+                    data.push(simulation[t][t][z]);
+                }
+                else break;
+            }
+        }
+        if (getASize()==5) {return true;}
+        else {
+            int temp = getASize();
+            for (int b = 1; b <= (5-temp); b++) {
+                if (isAdjacent((x - b), (y-b), z, c)) {
+                    data.push(simulation[(x - b)][(y-b)][z]);
+                }
+                else if (isOut((x-b),y,z) && isOut(x,(y-b),z)){
+                    track = 2;
+                    break;
+                }
+                else break;
+            }
+            if (track==2){
+                temp = getASize();
+                for(int t = (rows-1); t>((rows-1)-(5-temp));t--){
+                    if (isAdjacent(t,t,z,c)){
+                        data.push(simulation[t][t][z]);
+                    }
+                    else break;
+                }
+            }
+            if (getASize() == 5) return true;
+            else {
+                data.clear();
+                data.push(simulation[x][y][z]);
+                for(int a =1;a<=4;a++){
+                    if(isAdjacent((x+a),(y-a),z,c)){
+                        data.push(simulation[(x+a)][(y-a)][z]);
+                    }
+                    else if (isOut((x+a),y,z) && isOut(x,(y-a),z)){
+                        track = 3;
+                        break;
+                    }
+                    else break;
+                }
+                if (track==3){
+                    int tempX = 0;
+                    for (int t = (rows-1);t>((rows-1)-(5-temp));t--){
+                        if(isAdjacent(tempX,t,z,c)) {
+                            data.push(simulation[tempX][t][z]);
+                            tempX++;
+                        }
+                        else break;
+                    }
+                }
+                if (getASize()==5) return true;
+                else {
+                    for(int b =1;b<=(5-temp);b++){
+                        if (isAdjacent((x-b),(y+b),z,c)){
+                            data.push(simulation[(x-b)][(y+b)][z]);
+                        }
+                        else if (isOut((x-b),y,z) && isOut(x,(y+b),z)){
+                            track = 4;
+                            break;
+                        }
+                        else break;
+                    }
+                    if (track == 4){
+                        int tempY = 0;
+                        for(int t = (rows-1); t>(rows-1)-(5-temp);t--){
+                            if(isAdjacent(t,tempY,z,c)){
+                                data.push(simulation[t][tempY][z]);
+                                tempY++;
+                            }
+                            else break;
+                        }
+                    }
+                    if (getASize()==5) return true;
+                    else {
+                        data.clear();
+                        data.push(simulation[x][y][z]);
+                        return false;
+                }
+            }
+        }
+    }
+}
+    
     /*
     Uses previous methods to check all directions for win condition.
     */
@@ -1261,6 +1586,7 @@ public class ConnectGUI extends JApplet
                 if (checkX(x, y, z, c)) return true;
                 else if (checkY(x, y, z, c)) return true;
                 else if (checkZ(x, y, z, c)) return true;
+                else if (checkXY(x,y,z,c)) return true;
                 else if (checkXD(x, y, z, c)) return true;
                 else if (checkYD(x, y, z, c))return true;
                 else if (checkXYD(x, y, z, c)) return true;
@@ -1277,3 +1603,6 @@ public class ConnectGUI extends JApplet
 
 
 }
+
+    
+
