@@ -70,6 +70,8 @@ public class ConnectGUI extends JApplet
     {
         public void actionPerformed(ActionEvent e)
         {
+            AIDone = false;
+            turn = 0;
             for(Z = 0;Z < BoardSize; Z++)
             {
                 for(X = 0;X < BoardSize;X++)
@@ -80,6 +82,8 @@ public class ConnectGUI extends JApplet
                     }
                 }
             }
+            AIDone = false;
+			repaint();
         }
     }
      
@@ -96,6 +100,8 @@ public class ConnectGUI extends JApplet
 
 
             Graphics g = getGraphics();
+			g.setColor(Color.black);
+			g.setFont(new Font("TimesRoman", Font.PLAIN, 80));
             //if(i < 800 && j < 400)
             //{
             i = i - 800;
@@ -114,7 +120,6 @@ public class ConnectGUI extends JApplet
                     {
                         if(AI('R'))
                         {
-                            
                             AIDone = true;
                         }
                         else
@@ -355,7 +360,7 @@ public class ConnectGUI extends JApplet
                 }
                 else
                 {
-                    Team = 'R';
+                    Team = 'O';
                     if(AI5 == 0)
                     {
                         if(AI('O'))
@@ -416,7 +421,14 @@ public class ConnectGUI extends JApplet
                     }
                 }
                 repaint();
+				
             }
+			if(AIDone == true)
+			{
+				g.setColor(WIN);
+				g.setFont(new Font("TimesRoman", Font.PLAIN, 80));
+				g.drawString("WIN!!!!!!",350,300);
+			}
         }
 
         public void mouseReleased(MouseEvent e)
@@ -594,7 +606,7 @@ public class ConnectGUI extends JApplet
         rootPane.add(aButton);
         aButton.setBounds(450,450,200,50);
         rootPane.add(clearButton);
-        clearButton.setBounds(111450,500,200,50);
+        clearButton.setBounds(450,550,200,50);
         rootPane.add(AI1Button);
         AI1Button.setBounds(120,420,200,20);
         rootPane.add(AI2Button);
@@ -947,6 +959,7 @@ public class ConnectGUI extends JApplet
         int FinalValue = 0;
         int FX = 0;
         int FY = 0;
+        int FZ = 0;
         int zed = 0;
         for(int AIX = 0; AIX < BoardSize; AIX = AIX + 1)
         {
@@ -962,15 +975,16 @@ public class ConnectGUI extends JApplet
                         FinalValue = TestValue;
                         FX = AIX;
                         FY = AIY;
+                        FZ = zed;
                     }
                 }
             }
         }
         Place(FX,FY,Team);
         repaint();
-        if(check(FX,FY,zed,Team))
+        if(check(FX,FY,FZ,Team))
         {
-            simulation[FX][FY][zed] = 'W';
+            simulation[FX][FY][FZ] = 'W';
             repaint();
             return true;
         }
@@ -1650,13 +1664,34 @@ public class ConnectGUI extends JApplet
         try {
             if (simulation[x][y][z] == c) {
                 data.push(simulation[x][y][z]);
-                if (checkX(x, y, z, c)) return true;
-                else if (checkY(x, y, z, c)) return true;
-                else if (checkZ(x, y, z, c)) return true;
-                else if (checkXY(x,y,z,c)) return true;
-                else if (checkXD(x, y, z, c)) return true;
-                else if (checkYD(x, y, z, c))return true;
-                else if (checkXYD(x, y, z, c)) return true;
+                if (checkX(x, y, z, c)) {
+					data.clear();
+					return true;
+				}
+                else if (checkY(x, y, z, c)) {
+					data.clear();
+					return true;
+				}
+                else if (checkXY(x, y, z, c)) {
+					data.clear();
+					return true;
+				}
+                else if (checkXD(x, y, z, c)) {
+					data.clear();
+					return true;
+				}
+                else if (checkYD(x, y, z, c)) {
+					data.clear();
+					return true;
+				}
+                else if (checkXYD(x, y, z, c)) {
+					data.clear();
+					return true;
+				}
+                else if (checkZ(x, y, z, c)) {
+					data.clear();
+					return true;
+				}
                 else {
                     data.clear();
                     return false;
