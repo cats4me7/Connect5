@@ -33,11 +33,12 @@ public class ConnectGUI extends JApplet
     public int turn = 0;
     int S = 1;
     int TIME = 0;
-    int AI1 = 0;
+    int AI1 = 42;
     int AI2 = 0;
     int AI3 = 0;
     int AI4 = 0;
     int AI5 = 0;
+    boolean AIDone = false;
     
     // CHECKER VARIABLES
     private Stack data = new Stack(5);
@@ -53,46 +54,12 @@ public class ConnectGUI extends JApplet
         public void actionPerformed(ActionEvent e)
         {
             Graphics g = getGraphics();
-            while(ThisGame == true)
-            {
-               if(AI('R'))
-               {
-                   g.setColor(Color.red);
-                   g.fillRect(0,0,100,100);
-                   ThisGame = false;
-                   break;
-               }
-               if(AI('G'))
-               {
-                   g.setColor(Color.red);
-                   g.fillRect(0,0,100,100);
-                   ThisGame = false;
-                   break;
-               }
-               if(AI('B'))
-               {
-                   g.setColor(Color.red);
-                   g.fillRect(0,0,100,100);
-                   ThisGame = false;
-                   break;
-               }
-               if(AI('Y'))
-               {
-                   g.setColor(Color.red);
-                   g.fillRect(0,0,100,100);
-                   ThisGame = false;
-                   break;
-               }
-               if(AI('O'))
-               {
-                   g.setColor(Color.red);
-                   g.fillRect(0,0,100,100);
-                   ThisGame = false;
-                   break;
-               }
-            }
+            String boardSize = JOptionPane.showInputDialog(myFrame, "Enter A floor Size ( 5 - 10)");
+            int BoardSize = Integer.parseInt(boardSize);
+            g.drawString("" + BoardSize,200,400);
         }
-    }       
+    }
+          
 
     ButtonListener aButtonListener = new ButtonListener();
 
@@ -122,76 +89,278 @@ public class ConnectGUI extends JApplet
         {
             int i = e.getX();
             int j = e.getY();
+            
+            
+            
             Graphics g = getGraphics();
             //if(i < 800 && j < 400)
             //{
-                i = i - 800;
-                j = j - 400;
-                i = i / 20;
-                j = j / 20;
-                int z = 0;
-                int h = i;
-                int c = j;
-                
+            i = i - 800;
+            j = j - 400;
+            i = i / 20;
+            j = j / 20;
+            int z = 0;
+            int h = i;
+            int c = j;
+            if(AIDone == false)
+            {
                 if(turn == 0)
                 {
                     Team = 'R';
+                    if(AI1 == 0)
+                    {
+                        if(AI('R'))
+                        {
+                            AIDone = true;
+                        }
+                        else
+                        {
+                            turn = 1;
+                        }
+                    }
+                    else
+                    {
+                        if(simulation[h][c][z] == '#')
+                        {
+                            ThisGame = false;
+                            simulation[h][c][z] = Team;
+                            if(check(h,c,z,Team))
+                            {
+                                AIDone = true;
+                            }
+                            else
+                            {
+                                turn = 1;
+                            }
+                        }
+                        else if(simulation[h][c][z] != '#' && z < 10)
+                        {
+                            while(simulation[h][c][z] != '#' && z < 10)
+                            {
+                                z = z + 1;
+                            }
+                            simulation[h][c][z] = Team;
+                            if(check(h,c,z,Team))
+                            {
+                                AIDone = true;
+                            }
+                            else
+                            {
+                                turn = 1;
+                            }
+                        }
+                        else
+                        {
+                            //simulation[0][1][1] = 'R';
+                        }
+                    }
                 }
                 else if(turn == 1)
                 {
                     Team = 'G';
+                    if(AI2 == 0)
+                    {
+                        if(AI('G'))
+                        {
+                            AIDone = true;
+                        }
+                        else
+                        {
+                            turn = 2;
+                        }
+                    }
+                    else
+                    {
+                        if(simulation[h][c][z] == '#')
+                        {
+                            ThisGame = false;
+                            simulation[h][c][z] = Team;
+                            if(check(h,c,z,Team))
+                            {
+                                AIDone = true;
+                            }
+                            else
+                            {
+                                turn = 2;
+                            }
+                        }
+                        else if(simulation[h][c][z] != '#' && z < 10)
+                        {
+                            while(simulation[h][c][z] != '#' && z < 10)
+                            {
+                                z = z + 1;
+                            }
+                            simulation[h][c][z] = Team;
+                            if(check(h,c,z,Team))
+                            {
+                                AIDone = true;
+                            }
+                            else
+                            {
+                                turn = 2;
+                            }
+                        }
+                        else
+                        {
+                            //simulation[0][1][1] = 'R';
+                        }
+                    }
                 }
                 else if(turn == 2)
                 {
                     Team = 'B';
+                    if(AI3 == 0)
+                    {
+                        if(AI('B'))
+                        {
+                            AIDone = true;
+                        }
+                        else
+                        {
+                            turn = 3;
+                        }
+                    }
+                    else
+                    {
+                        if(simulation[h][c][z] == '#')
+                        {
+                            ThisGame = false;
+                            simulation[h][c][z] = Team;
+                            if(check(h,c,z,Team))
+                            {
+                                AIDone = true;
+                            }
+                            else
+                            {
+                                turn = 3;
+                            }
+                        }
+                        else if(simulation[h][c][z] != '#' && z < 10)
+                        {
+                            while(simulation[h][c][z] != '#' && z < 10)
+                            {
+                                z = z + 1;
+                            }
+                            simulation[h][c][z] = Team;
+                            if(check(h,c,z,Team))
+                            {
+                                AIDone = true;
+                            }
+                            else
+                            {
+                                turn = 3;
+                            }
+                        }
+                        else
+                        {
+                            //simulation[0][1][1] = 'R';
+                        }
+                    }
                 }
                 else if(turn == 3)
                 {
                     Team = 'Y';
-                }
-                else
-                {
-                    Team = 'O';
-                }
-                
-                if(simulation[h][c][z] == '#')
-                {
-                    simulation[h][c][z] = Team;
-                    if(turn == 0)
+                    if(AI4 == 0)
                     {
-                        turn = 1;
-                    }
-                    else if(turn == 1)
-                    {
-                        turn = 2;
-                    }
-                    else if(turn == 2)
-                    {
-                        turn = 3;
-                    }
-                    else if(turn == 3)
-                    {
-                        turn = 4;
+                        if(AI('Y'))
+                        {
+                           AIDone = true; 
+                        }
+                        else
+                        {
+                            turn = 4;
+                        }
                     }
                     else
                     {
-                        turn = 0;
+                        if(simulation[h][c][z] == '#')
+                        {
+                            ThisGame = false;
+                            simulation[h][c][z] = Team;
+                            if(check(h,c,z,Team))
+                            {
+                                AIDone = true;
+                            }
+                            else
+                            {
+                                turn = 4;
+                            }
+                        }
+                        else if(simulation[h][c][z] != '#' && z < 10)
+                        {
+                            while(simulation[h][c][z] != '#' && z < 10)
+                            {
+                                z = z + 1;
+                            }
+                            simulation[h][c][z] = Team;
+                            if(check(h,c,z,Team))
+                            {
+                                AIDone = true;
+                            }
+                            else
+                            {
+                                turn = 4;
+                            }
+                        }
+                        else
+                        {
+                            //simulation[0][1][1] = 'R';
+                        }
                     }
-                }
-                else if(simulation[h][c][z] != '#' && z < 10)
-                {
-                    while(simulation[h][c][z] != '#' && z < 10)
-                    {
-                        z = z + 1;
-                    }
-                    simulation[h][c][z] = Team;
                 }
                 else
                 {
-                    //simulation[0][1][1] = 'R';
+                    Team = 'R';
+                    if(AI5 == 0)
+                    {
+                        if(AI('O'))
+                        {
+                            AIDone = true;
+                        }
+                        else
+                        {
+                            turn = 0;
+                        }
+                    }
+                    else
+                    {
+                        if(simulation[h][c][z] == '#')
+                        {
+                            ThisGame = false;
+                            simulation[h][c][z] = Team;
+                            if(check(h,c,z,Team))
+                            {
+                                AIDone = true;
+                            }
+                            else
+                            {
+                                turn = 0;
+                            }
+                        }
+                        else if(simulation[h][c][z] != '#' && z < 10)
+                        {
+                            while(simulation[h][c][z] != '#' && z < 10)
+                            {
+                                z = z + 1;
+                            }
+                            simulation[h][c][z] = Team;
+                            if(check(h,c,z,Team))
+                            {
+                                AIDone = true;
+                            }
+                            else
+                            {
+                                turn = 0;
+                            }
+                        }
+                        else
+                        {
+                            //simulation[0][1][1] = 'R';
+                        }
+                    }
                 }
-            //}
-            repaint();
+                repaint();
+            }
         }
 
         public void mouseReleased(MouseEvent e)
@@ -215,7 +384,7 @@ public class ConnectGUI extends JApplet
 
     JFrame myFrame = new JFrame();
     JPanel aPanel = new JPanel();
-    JButton aButton = new JButton("PLAY!");
+    JButton aButton = new JButton("Set Board Size");
     JButton clearButton = new JButton("REFRESH!");
 
      /**
@@ -236,7 +405,7 @@ public class ConnectGUI extends JApplet
         aButton.addActionListener(aButtonListener);
         clearButton.addActionListener(clear);
         rootPane.add(aButton);
-        aButton.setBounds(450,450,200,50);
+        aButton.setBounds(400,450,400,50);
         rootPane.add(clearButton);
         clearButton.setBounds(450,500,200,50);
         this.addMouseListener(myListener);
