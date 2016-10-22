@@ -41,6 +41,7 @@ public class ConnectGUI extends JApplet
     int AI5 = 0;
     int BoardSize = 10;
     boolean AIDone = false;
+    int boot = 0;
     
     // CHECKER VARIABLES
     private Stack data = new Stack(5);
@@ -212,8 +213,6 @@ public class ConnectGUI extends JApplet
                                 simulation[h][c][z] = Team;
                                 if(check(h,c,z,Team))
                                 {
-                                    simulation[h][c][z] = 'W';
-                                    repaint();
                                     AIDone = true;
                                 }
                                 else
@@ -239,8 +238,6 @@ public class ConnectGUI extends JApplet
                     {
                         if(AI('B'))
                         {
-                            simulation[h][c][z] = 'W';
-                            repaint();
                             AIDone = true;
                         }
                         else
@@ -301,8 +298,6 @@ public class ConnectGUI extends JApplet
                     {
                         if(AI('Y'))
                         {
-                            simulation[h][c][z] = 'W';
-                            repaint();
                             AIDone = true;
                         }
                         else
@@ -365,8 +360,6 @@ public class ConnectGUI extends JApplet
                     {
                         if(AI('O'))
                         {
-                            simulation[h][c][z] = 'W';
-                            repaint();
                             AIDone = true;
                         }
                         else
@@ -601,17 +594,17 @@ public class ConnectGUI extends JApplet
         rootPane.add(aButton);
         aButton.setBounds(450,450,200,50);
         rootPane.add(clearButton);
-        clearButton.setBounds(450,500,200,50);
+        clearButton.setBounds(111450,500,200,50);
         rootPane.add(AI1Button);
-        AI1Button.setBounds(150,415,200,20);
+        AI1Button.setBounds(120,420,200,20);
         rootPane.add(AI2Button);
-        AI2Button.setBounds(150,445,200,20);
+        AI2Button.setBounds(120,450,200,20);
         rootPane.add(AI3Button);
-        AI3Button.setBounds(150,475,200,20);
+        AI3Button.setBounds(120,480,200,20);
         rootPane.add(AI4Button);
-        AI4Button.setBounds(150,510,200,20);
+        AI4Button.setBounds(120,510,200,20);
         rootPane.add(AI5Button);
-        AI5Button.setBounds(150,545,200,20);
+        AI5Button.setBounds(120,540,200,20);
         this.addMouseListener(myListener);
         // provide any initialisation necessary for your JApplet
     }
@@ -650,7 +643,21 @@ public class ConnectGUI extends JApplet
         //Base simulation
         g.setColor(MenuColor);
         g.fillRect(0,0,1000,1000);
-
+        if(boot == 0)
+        {
+            for(Z = 0;Z < BoardSize; Z++)
+            {
+                for(X = 0;X < BoardSize;X++)
+                {
+                    for(Y = 0; Y < BoardSize; Y++)
+                    {
+                        simulation[X][Y][Z] = '#';
+                    }
+                }
+            }
+            boot = 1;
+        }
+        boot = 1;
         //Move Updater - Needs to be second.
         for(X = 0;X < BoardSize; X++)
         {
@@ -803,29 +810,89 @@ public class ConnectGUI extends JApplet
         g.drawLine(400,400,400,600);
         g.drawString("Please Click a spot to the right!",450,430);
         g.drawString("--------------------------------->",450,450);
+        g.drawString("Click for every move ( AI included )",450,530);
 
 
         //Players
         g.setColor(Color.red);
         g.fillRect(10,420,20,20);
         g.drawString("Player 1",35,435);
+        if(AI1 == 0)
+        {
+            g.drawString("AI",330,435);
+        }
+        else if(AI1 == 1)
+        {
+            g.drawString("Player",330,435);
+        }
+        else
+        {
+            g.drawString("NONE",330,435);
+        }
 
         g.setColor(Color.green);
         g.fillRect(10,450,20,20);
         g.drawString("Player 2",35,465);
+        if(AI2 == 0)
+        {
+            g.drawString("AI",330,465);
+        }
+        else if(AI2 == 1)
+        {
+            g.drawString("Player",330,465);
+        }
+        else
+        {
+            g.drawString("NONE",330,465);
+        }
 
         g.setColor(Color.blue);
         g.fillRect(10,480,20,20);
         g.drawString("Player 3",35,495);
+        if(AI3 == 0)
+        {
+            g.drawString("AI",330,495);
+        }
+        else if(AI3 == 1)
+        {
+            g.drawString("Player",330,495);
+        }
+        else
+        {
+            g.drawString("NONE",330,495);
+        }
 
         g.setColor(Color.yellow);
         g.fillRect(10,510,20,20);
         g.drawString("Player 4",35,525);
+        if(AI4 == 0)
+        {
+            g.drawString("AI",330,525);
+        }
+        else if(AI4 == 1)
+        {
+            g.drawString("Player",330,525);
+        }
+        else
+        {
+            g.drawString("NONE",330,525);
+        }
 
         g.setColor(Color.orange);
         g.fillRect(10,540,20,20);
         g.drawString("Player 5",35,555);
-
+        if(AI5 == 0)
+        {
+            g.drawString("AI",330,555);
+        }
+        else if(AI5 == 1)
+        {
+            g.drawString("Player",330,555);
+        }
+        else
+        {
+            g.drawString("NONE",330,555);
+        }
     }
     
      char getAt(int x, int y, int z) {
