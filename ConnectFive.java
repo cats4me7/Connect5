@@ -287,6 +287,100 @@ public class ConnectFive {
         }
     }
 
+    public boolean checkXY(int x, int y, int z, char c){
+        int track = 0;
+        for (int a = 1; a <= 4; a++) {
+            if (isAdjacent((x + a), (y+a), z, c)) {
+                data.push(board[(x + a)][(y+a)][z]);
+            }
+            else if (isOut((x+a),y,z) && isOut(x,(y+a),z)){
+                track = 1;
+                break;
+            }
+            else break;
+        }
+        if (track == 1){
+            int temp = getSize();
+            for(int t = 0; t<(5-temp);t++){
+                if (isAdjacent(t,t,z,c)){
+                    data.push(board[t][t][z]);
+                }
+                else break;
+            }
+        }
+        if (getSize()==5) {return true;}
+        else {
+            int temp = getSize();
+            for (int b = 1; b <= (5-temp); b++) {
+                if (isAdjacent((x - b), (y-b), z, c)) {
+                    data.push(board[(x - b)][(y-b)][z]);
+                }
+                else if (isOut((x-b),y,z) && isOut(x,(y-b),z)){
+                    track = 2;
+                    break;
+                }
+                else break;
+            }
+            if (track==2){
+                temp = getSize();
+                for(int t = (rows-1); t>((rows-1)-(5-temp));t--){
+                    if (isAdjacent(t,t,z,c)){
+                        data.push(board[t][t][z]);
+                    }
+                    else break;
+                }
+            }
+            if (getSize() == 5) return true;
+            else {
+                data.clear();
+                data.push(board[x][y][z]);
+                for(int a =1;a<=4;a++){
+                    if(isAdjacent((x+a),(y-a),z,c)){
+                        data.push(board[(x+a)][(y-a)][z]);
+                    }
+                    else if (isOut((x+a),y,z) && isOut(x,(y-a),z)){
+                        track = 3;
+                        break;
+                    }
+                    else break;
+                }
+                if (track==3){
+                    int tempX = 0;
+                    for (int t = (rows-1);t>((rows-1)-(5-temp));t--){
+                        if(isAdjacent(tempX,t,z,c)) {
+                            data.push(board[tempX][t][z]);
+                            tempX++;
+                        }
+                        else break;
+                    }
+                }
+                if (getSize()==5) return true;
+                else {
+                    for(int b =1;b<=(5-temp);b++){
+                        if (isAdjacent((x-b),(y+b),z,c)){
+                            data.push(board[(x-b)][(y+b)][z]);
+                        }
+                        else if (isOut((x-b),y,z) && isOut(x,(y+b),z)){
+                            track = 4;
+                            break;
+                        }
+                        else break;
+                    }
+                    if (track == 4){
+                        int tempY = 0;
+                        for(int t = (rows-1); t>(rows-1)-(5-temp);t--){
+                            if(isAdjacent(t,tempY,z,c)){
+                                data.push(board[t][tempY][z]);
+                                tempY++;
+                            }
+                            else break;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     /*
     Checks diagonal directions for win condition.
      */
@@ -687,6 +781,7 @@ public class ConnectFive {
                 if (checkX(x, y, z, c)) return true;
                 else if (checkY(x, y, z, c)) return true;
                 else if (checkZ(x, y, z, c)) return true;
+                else if (checkXY(x,y,z,c)) return true;
                 else if (checkXD(x, y, z, c)) return true;
                 else if (checkYD(x, y, z, c))return true;
                 else if (checkXYD(x, y, z, c)) return true;
