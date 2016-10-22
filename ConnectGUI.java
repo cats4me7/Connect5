@@ -28,7 +28,8 @@ public class ConnectGUI extends JApplet
     int tracker;
     boolean Searching;
     Leaf LeafTree[] = new Leaf[500];
-    public char[][][] simulation = new char[10][10][10];
+    int BoardSize = 10;
+    public char[][][] simulation = new char[BoardSize][BoardSize][BoardSize];
     int counter = 0;
     public int turn = 0;
     int S = 1;
@@ -39,14 +40,11 @@ public class ConnectGUI extends JApplet
     int AI4 = 0;
     int AI5 = 0;
     boolean AIDone = false;
-    
+
     // CHECKER VARIABLES
     private Stack data = new Stack(5);
-    private int rows=10;
-    private int col=10;
-    private int depth=10;
     private boolean valid = true;
-    
+
     boolean ThisGame = true;
     //End variables
     private class ButtonListener implements ActionListener
@@ -55,11 +53,12 @@ public class ConnectGUI extends JApplet
         {
             Graphics g = getGraphics();
             String boardSize = JOptionPane.showInputDialog(myFrame, "Enter A floor Size ( 5 - 10)");
-            int BoardSize = Integer.parseInt(boardSize);
+            BoardSize = Integer.parseInt(boardSize);
             g.drawString("" + BoardSize,200,400);
+            simulation = Arrays.copyOf(simulation, BoardSize);
         }
     }
-          
+
 
     ButtonListener aButtonListener = new ButtonListener();
 
@@ -67,31 +66,31 @@ public class ConnectGUI extends JApplet
     {
         public void actionPerformed(ActionEvent e)
         {
-            for(Z = 0;Z < 10; Z++)
+            for(Z = 0;Z < BoardSize; Z++)
             {
-                for(X = 0;X < 10;X++)
+                for(X = 0;X < BoardSize;X++)
                 {
-                    for(Y = 0; Y < 10; Y++)
+                    for(Y = 0; Y < BoardSize; Y++)
                     {
                         simulation[X][Y][Z] = '#';
                     }
                 }
             }
         }
-     }
-     
+    }
+
     ClearButtonListener clear = new ClearButtonListener();
-    
+
     private class MousePressedListener implements MouseListener
     {
-        
+
         public void mousePressed(MouseEvent e)
         {
             int i = e.getX();
             int j = e.getY();
-            
-            
-            
+
+
+
             Graphics g = getGraphics();
             //if(i < 800 && j < 400)
             //{
@@ -133,9 +132,9 @@ public class ConnectGUI extends JApplet
                                 turn = 1;
                             }
                         }
-                        else if(simulation[h][c][z] != '#' && z < 10)
+                        else if(simulation[h][c][z] != '#' && z < BoardSize)
                         {
-                            while(simulation[h][c][z] != '#' && z < 10)
+                            while(simulation[h][c][z] != '#' && z < BoardSize)
                             {
                                 z = z + 1;
                             }
@@ -184,9 +183,9 @@ public class ConnectGUI extends JApplet
                                 turn = 2;
                             }
                         }
-                        else if(simulation[h][c][z] != '#' && z < 10)
+                        else if(simulation[h][c][z] != '#' && z < BoardSize)
                         {
-                            while(simulation[h][c][z] != '#' && z < 10)
+                            while(simulation[h][c][z] != '#' && z < BoardSize)
                             {
                                 z = z + 1;
                             }
@@ -235,9 +234,9 @@ public class ConnectGUI extends JApplet
                                 turn = 3;
                             }
                         }
-                        else if(simulation[h][c][z] != '#' && z < 10)
+                        else if(simulation[h][c][z] != '#' && z < BoardSize)
                         {
-                            while(simulation[h][c][z] != '#' && z < 10)
+                            while(simulation[h][c][z] != '#' && z < BoardSize)
                             {
                                 z = z + 1;
                             }
@@ -264,7 +263,7 @@ public class ConnectGUI extends JApplet
                     {
                         if(AI('Y'))
                         {
-                           AIDone = true; 
+                            AIDone = true;
                         }
                         else
                         {
@@ -286,9 +285,9 @@ public class ConnectGUI extends JApplet
                                 turn = 4;
                             }
                         }
-                        else if(simulation[h][c][z] != '#' && z < 10)
+                        else if(simulation[h][c][z] != '#' && z < BoardSize)
                         {
-                            while(simulation[h][c][z] != '#' && z < 10)
+                            while(simulation[h][c][z] != '#' && z < BoardSize)
                             {
                                 z = z + 1;
                             }
@@ -337,9 +336,9 @@ public class ConnectGUI extends JApplet
                                 turn = 0;
                             }
                         }
-                        else if(simulation[h][c][z] != '#' && z < 10)
+                        else if(simulation[h][c][z] != '#' && z < BoardSize)
                         {
-                            while(simulation[h][c][z] != '#' && z < 10)
+                            while(simulation[h][c][z] != '#' && z < BoardSize)
                             {
                                 z = z + 1;
                             }
@@ -378,7 +377,7 @@ public class ConnectGUI extends JApplet
         public void mouseExited(MouseEvent e)
         {
         }
-     }
+    }
 
     MousePressedListener myListener = new MousePressedListener();
 
@@ -387,17 +386,17 @@ public class ConnectGUI extends JApplet
     JButton aButton = new JButton("Set Board Size");
     JButton clearButton = new JButton("REFRESH!");
 
-     /**
-     * Called by the browser or applet viewer to inform this JApplet that it
+    /**
+     * Called by the bBoardSizeer or applet viewer to inform this JApplet that it
      * has been loaded into the system. It is always called before the first
      * time that the start method is called.
      */
     public void init()
     {
-        // this is a workaround for a security conflict with some browsers
+        // this is a workaround for a security conflict with some bBoardSizeers
         // including some versions of Netscape & Internet Explorer which do
         // not allow access to the AWT system event queue which JApplets do
-        // on startup to check access. May not be necessary with your browserJRootPane rootPane = this.getRootPane();
+        // on startup to check access. May not be necessary with your bBoardSizeerJRootPane rootPane = this.getRootPane();
         JRootPane rootPane = this.getRootPane();
         rootPane.putClientProperty("defeatSystemEventQueueCheck", Boolean.TRUE);
         this.setSize(1002,602);
@@ -414,7 +413,7 @@ public class ConnectGUI extends JApplet
     }
 
     /**
-     * Called by the browser or applet viewer to inform this JApplet that it
+     * Called by the bBoardSizeer or applet viewer to inform this JApplet that it
      * should start its execution. It is called after the init method and
      * each time the JApplet is revisited in a Web page.
      */
@@ -425,7 +424,7 @@ public class ConnectGUI extends JApplet
     }
 
     /**
-     * Called by the browser or applet viewer to inform this JApplet that
+     * Called by the bBoardSizeer or applet viewer to inform this JApplet that
      * it should stop its execution. It is called when the Web page that
      * contains this JApplet has been replaced by another page, and also
      * just before the JApplet is to be destroyed.
@@ -447,122 +446,122 @@ public class ConnectGUI extends JApplet
         //Base simulation
         g.setColor(MenuColor);
         g.fillRect(0,0,1000,1000);
-        
+
         //Move Updater - Needs to be second.
-        for(X = 0;X < 10; X++)
-       {
-           for(Y = 0;Y < 10;Y++)
-           {
-               for(Z = 0; Z < 10; Z++)
-               {
-                   if(simulation[X][Y][Z] == 'R')
-                   {
-                       g.setColor(Color.red);
-                       if(Z < 5)
-                       {
-                           g.fillRect((X * 20) + (Z * 200), Y * 20,20,20); 
-                       }
-                       else
-                       {
-                           int TZ = Z - 5;
-                           g.fillRect((X * 20) + (TZ * 200),((Y * 20) + 200),20,20);
-                     
-                       }
-                   }
-                   else if(simulation[X][Y][Z] == 'G')
-                   {
-                       g.setColor(Color.green); 
-                       if(Z < 5)
-                       {
-                           g.fillRect((X * 20) + (Z * 200), Y * 20,20,20); 
-                       }
-                       else
-                       {
-                           int TZ = Z - 5;
-                           g.fillRect((X * 20) + (TZ * 200),((Y * 20) + 200),20,20);
-                     
-                       }
-                   }
-                   else if(simulation[X][Y][Z] == 'B')
-                   {
-                       g.setColor(Color.blue); 
-                       if(Z < 5)
-                       {
-                           g.fillRect((X * 20) + (Z * 200), Y * 20,20,20); 
-                       }
-                       else
-                       {
-                           int TZ = Z - 5;
-                           g.fillRect((X * 20) + (TZ * 200),((Y * 20) + 200),20,20);
-                     
-                       }
-                   }
-                   else if(simulation[X][Y][Z] == 'Y')
-                   {
-                       g.setColor(Color.yellow); 
-                       if(Z < 5)
-                       {
-                           g.fillRect((X * 20) + (Z * 200), Y * 20,20,20); 
-                       }
-                       else
-                       {
-                           int TZ = Z - 5;
-                           g.fillRect((X * 20) + (TZ * 200),((Y * 20) + 200),20,20);
-                     
-                       }
-                   }
-                   else if(simulation[X][Y][Z] == 'O')
-                   {
-                       g.setColor(Color.orange); 
-                       if(Z < 5)
-                       {
-                           g.fillRect((X * 20) + (Z * 200), Y * 20,20,20); 
-                       }
-                       else
-                       {
-                           int TZ = Z - 5;
-                           g.fillRect((X * 20) + (TZ * 200),((Y * 20) + 200),20,20);
-                     
-                       }
-                   }
-                   else
-                   {
-                       
-                   }
-               }
-           }
-       }
-       
-       //Grid for the display
+        for(X = 0;X < BoardSize; X++)
+        {
+            for(Y = 0;Y < BoardSize;Y++)
+            {
+                for(Z = 0; Z < BoardSize; Z++)
+                {
+                    if(simulation[X][Y][Z] == 'R')
+                    {
+                        g.setColor(Color.red);
+                        if(Z < 5)
+                        {
+                            g.fillRect((X * 20) + (Z * 200), Y * 20,20,20);
+                        }
+                        else
+                        {
+                            int TZ = Z - 5;
+                            g.fillRect((X * 20) + (TZ * 200),((Y * 20) + 200),20,20);
+
+                        }
+                    }
+                    else if(simulation[X][Y][Z] == 'G')
+                    {
+                        g.setColor(Color.green);
+                        if(Z < 5)
+                        {
+                            g.fillRect((X * 20) + (Z * 200), Y * 20,20,20);
+                        }
+                        else
+                        {
+                            int TZ = Z - 5;
+                            g.fillRect((X * 20) + (TZ * 200),((Y * 20) + 200),20,20);
+
+                        }
+                    }
+                    else if(simulation[X][Y][Z] == 'B')
+                    {
+                        g.setColor(Color.blue);
+                        if(Z < 5)
+                        {
+                            g.fillRect((X * 20) + (Z * 200), Y * 20,20,20);
+                        }
+                        else
+                        {
+                            int TZ = Z - 5;
+                            g.fillRect((X * 20) + (TZ * 200),((Y * 20) + 200),20,20);
+
+                        }
+                    }
+                    else if(simulation[X][Y][Z] == 'Y')
+                    {
+                        g.setColor(Color.yellow);
+                        if(Z < 5)
+                        {
+                            g.fillRect((X * 20) + (Z * 200), Y * 20,20,20);
+                        }
+                        else
+                        {
+                            int TZ = Z - 5;
+                            g.fillRect((X * 20) + (TZ * 200),((Y * 20) + 200),20,20);
+
+                        }
+                    }
+                    else if(simulation[X][Y][Z] == 'O')
+                    {
+                        g.setColor(Color.orange);
+                        if(Z < 5)
+                        {
+                            g.fillRect((X * 20) + (Z * 200), Y * 20,20,20);
+                        }
+                        else
+                        {
+                            int TZ = Z - 5;
+                            g.fillRect((X * 20) + (TZ * 200),((Y * 20) + 200),20,20);
+
+                        }
+                    }
+                    else
+                    {
+
+                    }
+                }
+            }
+        }
+
+        //Grid for the display
         for(Z = 0;Z < 10; Z++)
-       {
-           for(X = 0;X < 10;X++)
-           {
-               for(Y = 0; Y < 10; Y++)
-               {
-                   g.setColor(Color.black);
-                   if(Z < 5)
-                   {
-                      g.drawRect((X * 20) + (Z * 200), Y * 20,20,20); 
-                   }
-                   else
-                   {
-                      int TZ = Z - 5;
-                      g.drawRect((X * 20) + (TZ * 200),((Y * 20) + 200),20,20);
-                      
-                   }
-               }
-           }
-       }
-       for(int x = 0; x < 10; x++)
-       {
-           for(int y = 0; y < 10; y++)
-           {
-               g.setColor(Color.black);
-               g.drawRect(x * 20 + 800,y * 20 + 400,20,20);
-           }
-       }
-     
+        {
+            for(X = 0;X < 10;X++)
+            {
+                for(Y = 0; Y < 10; Y++)
+                {
+                    g.setColor(Color.black);
+                    if(Z < 5)
+                    {
+                        g.drawRect((X * 20) + (Z * 200), Y * 20,20,20);
+                    }
+                    else
+                    {
+                        int TZ = Z - 5;
+                        g.drawRect((X * 20) + (TZ * 200),((Y * 20) + 200),20,20);
+
+                    }
+                }
+            }
+        }
+        for(int x = 0; x < 10; x++)
+        {
+            for(int y = 0; y < 10; y++)
+            {
+                g.setColor(Color.black);
+                g.drawRect(x * 20 + 800,y * 20 + 400,20,20);
+            }
+        }
+
         //The Top Row
         g.setColor(Color.black);
         g.fillRect(199,0,3,400);
@@ -576,9 +575,9 @@ public class ConnectGUI extends JApplet
         g.fillRect(0,0,1000,2);
         g.fillRect(0,0,2,600);
         //The Bottom Row
-        
-        
-        
+
+
+
         //The control Box - menu options.
         g.setColor(Color.black);
         g.setFont(new Font("TimesRoman", Font.PLAIN, 20));
@@ -586,39 +585,39 @@ public class ConnectGUI extends JApplet
         g.drawLine(400,400,400,600);
         g.drawString("Please Click a slpot to the right!",450,430);
         g.drawString("--------------------------------->",450,450);
-        
-        
+
+
         //Players
         g.setColor(Color.red);
         g.fillRect(10,420,20,20);
         g.drawString("Player 1",35,435);
-        
+
         g.setColor(Color.green);
         g.fillRect(10,450,20,20);
         g.drawString("Player 2",35,465);
-        
+
         g.setColor(Color.blue);
         g.fillRect(10,480,20,20);
         g.drawString("Player 3",35,495);
-        
+
         g.setColor(Color.yellow);
         g.fillRect(10,510,20,20);
         g.drawString("Player 4",35,525);
-        
+
         g.setColor(Color.orange);
         g.fillRect(10,540,20,20);
         g.drawString("Player 5",35,555);
-        
-        
+
+
     }
-    
+
     char getAt(int x, int y, int z) {
         return simulation[x][y][z];
     }
-    
+
     boolean Legal(int x , int y)
     {
-        if(simulation[x][y][9] == '#')
+        if(simulation[x][y][(BoardSize-1)] == '#')
         {
             return true;
         }
@@ -627,15 +626,15 @@ public class ConnectGUI extends JApplet
             return false;
         }
     }
-    
+
     boolean Place(int x, int y, char Team)
     {
         int zed = 0;
-        while(zed < 10 && simulation[x][y][zed] != '#')
+        while(zed < BoardSize && simulation[x][y][zed] != '#')
         {
             zed = zed + 1;
         }
-        if(zed < 10)
+        if(zed < BoardSize)
         {
             simulation[x][y][zed] = Team;
             return true;
@@ -649,14 +648,14 @@ public class ConnectGUI extends JApplet
     int FindZ(int x, int y)
     {
         int zed = 0;
-        while(zed < 10 && simulation[x][y][zed] != '#' )
+        while(zed < BoardSize && simulation[x][y][zed] != '#' )
         {
             zed = zed + 1;
         }
         return zed;
     }
-    
-    //Very Simple AI, just does rows. Its a start.
+
+    //Very Simple AI, just does BoardSize. Its a start.
     boolean AI(char Team)
     {
         Graphics g = getGraphics();
@@ -665,15 +664,15 @@ public class ConnectGUI extends JApplet
         int FX = 0;
         int FY = 0;
         int zed = 0;
-        for(int AIX = 0; AIX < 10; AIX = AIX + 1)
+        for(int AIX = 0; AIX < BoardSize; AIX = AIX + 1)
         {
-            for(int AIY = 0; AIY < 10; AIY = AIY + 1)
+            for(int AIY = 0; AIY < BoardSize; AIY = AIY + 1)
             {
                 if(Legal(AIX,AIY))
                 {
                     zed = FindZ(AIX,AIY);
                     TestValue = TestValue + LeftFind(AIX,AIY,zed,Team) + RightFind(AIX,AIY,zed,Team) + UpFind(AIX,AIY,zed,Team) + DownFind(AIX,AIY,zed,Team) + UpRightFind(AIX,AIY,zed,Team)
-                    + UpLeftFind(AIX,AIY,zed,Team) + DownRightFind(AIX,AIY,zed,Team) + DownLeftFind(AIX,AIY,zed,Team);
+                            + UpLeftFind(AIX,AIY,zed,Team) + DownRightFind(AIX,AIY,zed,Team) + DownLeftFind(AIX,AIY,zed,Team);
                     if(TestValue > FinalValue)
                     {
                         FinalValue = TestValue;
@@ -688,7 +687,7 @@ public class ConnectGUI extends JApplet
         return check(FX,FY,zed,Team);
         //return false;
     }
-    
+
     int LeftFind(int x, int y, int z, char Team)
     {
         SearchValue = 0;
@@ -710,18 +709,18 @@ public class ConnectGUI extends JApplet
             {
                 return SearchValue;
             }
-        }   
+        }
         return SearchValue;
     }
-    
+
     int RightFind(int x, int y, int z, char Team)
     {
         SearchValue = 0;
-        if((x + 1) < 10)
+        if((x + 1) < BoardSize)
         {
-            while(x < 9 && simulation[z][x + 1][y] == Team)
+            while(x < (BoardSize-1) && simulation[z][x + 1][y] == Team)
             {
-                if(x+1 < 10)
+                if(x+1 < BoardSize)
                 {
                     SearchValue = SearchValue + 1;
                     x = x + 1;
@@ -734,16 +733,16 @@ public class ConnectGUI extends JApplet
         }
         return SearchValue;
     }
-    
-    
+
+
     int UpFind(int x, int y, int z, char Team)
     {
         SearchValue = 0;
-        if((y + 1) < 10)
+        if((y + 1) < BoardSize)
         {
-            while( y < 9 && simulation[z][x][y + 1] == Team)
+            while( y < (BoardSize-1) && simulation[z][x][y + 1] == Team)
             {
-                if((y + 1) < 10)
+                if((y + 1) < BoardSize)
                 {
                     SearchValue = SearchValue + 1;
                     y = y + 1;
@@ -756,7 +755,7 @@ public class ConnectGUI extends JApplet
         }
         return SearchValue;
     }
-    
+
     int DownFind(int x, int y, int z, char Team)
     {
         SearchValue = 0;
@@ -777,7 +776,7 @@ public class ConnectGUI extends JApplet
         }
         return SearchValue;
     }
-    
+
     int UpLeftFind(int x, int y, int z, char Team)
     {
         SearchValue = 0;
@@ -786,7 +785,7 @@ public class ConnectGUI extends JApplet
             while((y > 0 && x > 0) && simulation[z][x - 1][y - 1] ==Team)
             {
                 if(((y - 1) > 0) && ((x - 1) > 0))
-                { 
+                {
                     SearchValue = SearchValue + 1;
                     x = x - 1;
                     y = y - 1;
@@ -799,15 +798,15 @@ public class ConnectGUI extends JApplet
         }
         return SearchValue;
     }
-    
+
     int UpRightFind(int x, int y, int z, char Team)
     {
         SearchValue = 0;
-        if(((y - 1) >= 0) && ((x + 1) < 10))
+        if(((y - 1) >= 0) && ((x + 1) < BoardSize))
         {
-            while((x < 9 && y > 0) && simulation[z][x + 1][y - 1] == Team)
+            while((x < (BoardSize-1) && y > 0) && simulation[z][x + 1][y - 1] == Team)
             {
-                if(((y - 1) > 0) && ((x + 1) < 10))
+                if(((y - 1) > 0) && ((x + 1) < BoardSize))
                 {
                     SearchValue = SearchValue + 1;
                     x = x + 1;
@@ -817,19 +816,19 @@ public class ConnectGUI extends JApplet
                 {
                     return SearchValue;
                 }
-            } 
+            }
         }
         return SearchValue;
-        
+
     }
     int DownLeftFind(int x, int y, int z, char Team)
     {
         SearchValue = 0;
-        if(((y + 1) < 10) && ((x - 1) > 0))
+        if(((y + 1) < BoardSize) && ((x - 1) > 0))
         {
-            while(( y < 9 && x > 0) && simulation[z][x - 1][y + 1] == Team)
+            while(( y < (BoardSize-1) && x > 0) && simulation[z][x - 1][y + 1] == Team)
             {
-                if(((y + 1) < 10) && ((x - 1) > 0))
+                if(((y + 1) < BoardSize) && ((x - 1) > 0))
                 {
                     SearchValue = SearchValue + 1;
                     x = x - 1;
@@ -843,15 +842,15 @@ public class ConnectGUI extends JApplet
         }
         return SearchValue;
     }
-        
+
     int DownRightFind(int x, int y, int z, char Team)
     {
         SearchValue = 0;
-        if(((y + 1) < 10) && ((x + 1) < 10))
+        if(((y + 1) < BoardSize) && ((x + 1) < BoardSize))
         {
-            while((y < 9 && x < 9) && simulation[z][x + 1][y + 1] == Team)
+            while((y < (BoardSize-1) && x < (BoardSize-1)) && simulation[z][x + 1][y + 1] == Team)
             {
-                if(((y + 1) < 10) && ((x + 1) < 10))
+                if(((y + 1) < BoardSize) && ((x + 1) < BoardSize))
                 {
                     SearchValue = SearchValue + 1;
                     x = x + 1;
@@ -865,11 +864,11 @@ public class ConnectGUI extends JApplet
         }
         return SearchValue;
     }
-    
+
     //CHECKER STUFF
     public int getASize() {return data.getSize();}
-    
-        public boolean isAdjacent(int x, int y, int z, char c) {
+
+    public boolean isAdjacent(int x, int y, int z, char c) {
         try{
             if (simulation[x][y][z] == c) {
                 return true;
@@ -880,9 +879,9 @@ public class ConnectGUI extends JApplet
     }
 
     public boolean isOut(int x, int y, int z){
-        if (x>=rows || x<0)return true;
-        else if (y>=col || y<0) return true;
-        else if (z>=depth || z<0) return true;
+        if (x>=BoardSize || x<0)return true;
+        else if (y>=BoardSize || y<0) return true;
+        else if (z>=BoardSize || z<0) return true;
         else return false;
     }
 
@@ -924,7 +923,7 @@ public class ConnectGUI extends JApplet
             }
             if (track==2){
                 temp = getASize();
-                for(int t = (rows-1); t>((rows-1)-(5-temp));t--){
+                for(int t = (BoardSize-1); t>((BoardSize-1)-(5-temp));t--){
                     if (isAdjacent(t,y,z,c)){
                         data.push(simulation[t][y][z]);
                     }
@@ -977,7 +976,7 @@ public class ConnectGUI extends JApplet
             }
             if (track==2){
                 temp = getASize();
-                for(int t = (rows-1); t>((rows-1)-(5-temp));t--){
+                for(int t = (BoardSize-1); t>((BoardSize-1)-(5-temp));t--){
                     if (isAdjacent(x,t,z,c)){
                         data.push(simulation[x][t][z]);
                     }
@@ -1061,7 +1060,7 @@ public class ConnectGUI extends JApplet
                 else break;
             }
             if(track==2){
-                for(int t = (rows-1); t > ((rows-1)-(5-temp));t++){
+                for(int t = (BoardSize-1); t > ((BoardSize-1)-(5-temp));t++){
                     if(isAdjacent(t,y,t,c)){
                         data.push(simulation[t][y][t]);
                     }
@@ -1082,7 +1081,7 @@ public class ConnectGUI extends JApplet
                     else break;
                 }
                 if (track == 3){
-                    for(int t = (rows-1); t > ((rows-1)-(5-temp));t++){
+                    for(int t = (BoardSize-1); t > ((BoardSize-1)-(5-temp));t++){
                         if(isAdjacent(t,y,t,c)){
                             data.push(simulation[t][y][t]);
                         }
@@ -1139,7 +1138,7 @@ public class ConnectGUI extends JApplet
                 else break;
             }
             if(track==2){
-                for(int t = (col-1); t< ((col-1)-(5-temp));t++){
+                for(int t = (BoardSize-1); t< ((BoardSize-1)-(5-temp));t++){
                     if(isAdjacent(x,t,t,c)){
                         data.push(simulation[x][t][t]);
                     }
@@ -1276,5 +1275,5 @@ public class ConnectGUI extends JApplet
         }catch(ArrayIndexOutOfBoundsException ex){return false;}
     }
 
-    
+
 }
