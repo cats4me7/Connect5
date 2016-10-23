@@ -6,14 +6,14 @@ import java.awt.event.MouseEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 /**
- * Class GameOfLife - write a description of the class here
+ * Connect Five
  *
- * @author (your name)
- * @version (a version number)
+ * @author Jason Means, Justin Cavender
+ * @version October 2016
  */
 public class ConnectGUI extends JApplet
 {
-    // instance variables - replace the example below with your own
+    // instance variables
     Color MenuColor = new Color(245,222,179);
     Color WIN = new Color(125,15,105);
     Color Bars = new Color(234, 147, 249);
@@ -431,21 +431,13 @@ public class ConnectGUI extends JApplet
             }
         }
 
-        public void mouseReleased(MouseEvent e)
-        {
-        }
+        public void mouseReleased(MouseEvent e){}
 
-        public void mouseClicked(MouseEvent e)
-        {
-        }
+        public void mouseClicked(MouseEvent e){}
 
-        public void mouseEntered(MouseEvent e)
-        {
-        }
+        public void mouseEntered(MouseEvent e){}
 
-        public void mouseExited(MouseEvent e)
-        {
-        }
+        public void mouseExited(MouseEvent e){}
      }
     
      MousePressedListener myListener = new MousePressedListener();
@@ -582,16 +574,10 @@ public class ConnectGUI extends JApplet
     JButton AI5Button = new JButton("Player - AI/Player/None");
 
      /**
-     * Called by the browser or applet viewer to inform this JApplet that it
-     * has been loaded into the system. It is always called before the first
-     * time that the start method is called.
+     * Initializes the GUI.
      */
     public void init()
     {
-        // this is a workaround for a security conflict with some browsers
-        // including some versions of Netscape & Internet Explorer which do
-        // not allow access to the AWT system event queue which JApplets do
-        // on startup to check access. May not be necessary with your browserJRootPane rootPane = this.getRootPane();
         JRootPane rootPane = this.getRootPane();
         rootPane.putClientProperty("defeatSystemEventQueueCheck", Boolean.TRUE);
         this.setSize(1002,602);
@@ -618,31 +604,12 @@ public class ConnectGUI extends JApplet
         rootPane.add(AI5Button);
         AI5Button.setBounds(120,540,200,20);
         this.addMouseListener(myListener);
-        // provide any initialisation necessary for your JApplet
     }
 
-    /**
-     * Called by the browser or applet viewer to inform this JApplet that it
-     * should start its execution. It is called after the init method and
-     * each time the JApplet is revisited in a Web page.
-     */
-    public void start()
-    {
-        // provide any code requred to run each time
-        // web page is visited
-    }
+    
+    public void start(){}
 
-    /**
-     * Called by the browser or applet viewer to inform this JApplet that
-     * it should stop its execution. It is called when the Web page that
-     * contains this JApplet has been replaced by another page, and also
-     * just before the JApplet is to be destroyed.
-     */
-    public void stop()
-    {
-        // provide any code that needs   to be run when page
-        // is replaced by another page or before JApplet is destroyed
-    }
+    public void stop(){}
 
     /**
      * Paint method for applet.
@@ -651,8 +618,7 @@ public class ConnectGUI extends JApplet
      */
     public void paint(Graphics g)
     {
-        // simple text displayed on applet
-        //Base simulation
+        //creating the menu
         g.setColor(MenuColor);
         g.fillRect(0,0,1000,1000);
         if(boot == 0)
@@ -951,7 +917,6 @@ public class ConnectGUI extends JApplet
         return zed;
     }
 
-    //Very Simple AI, just does boardSize. Its a start.
     boolean AI(char Team)
     {
         Graphics g = getGraphics();
